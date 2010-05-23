@@ -1,3 +1,15 @@
+/*
+ * jQuery UI Splitbutton 0.1
+ *
+ * @Author Richard Willis
+ *
+ * @Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.button.js
+ *
+ */
+
 (function( $ ) {
 
 $.widget('ui.splitbutton', {
