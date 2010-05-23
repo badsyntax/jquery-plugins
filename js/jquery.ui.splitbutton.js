@@ -30,33 +30,32 @@ $.widget('ui.splitbutton', {
 					primary: 'ui-icon-triangle-1-s'
 				}
 			}),
-			menubox: $('<div />').addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all'),
-			menulist: $('<ul />').addClass('ui-helper-reset')
+			menulist: $('<ul />').appendTo('body')
 		};
 
+		this.elements.menulist.addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset');
+
 		this.element.buttonset();
-		
-		this.elements.menubox.width( 
+
+		this.elements.menulist.width( 
 			this.options.width == 'inherit' ? 
-			this.elements.button.width() + this.elements.hitarea.outerWidth() : 
+			this.elements.button.width() + this.elements.hitarea.width()  : 
 			this.options.width 
 		);
 
 		this._buildList();
 		
-		this.elements.menubox.append( this.elements.menulist ).prependTo( 'body' );
-
 		this.elements.hitarea.click( function(){
 
 			$(this).css({ outline: 'none' }).focus();
 
 			self._positionBox();
 
-			self.elements.menubox.show();
+			self.elements.menulist.show();
 
 		}).bind( 'blur', function(){
 			
-			self.elements.menubox.hide();
+			self.elements.menulist.hide();
 		});
 	},
 
@@ -64,8 +63,8 @@ $.widget('ui.splitbutton', {
 		
 		var offset = this.elements.hitarea.offset();
 
-		this.elements.menubox.css({
-			left: ( offset.left - this.elements.menubox.width() ) + this.elements.hitarea.width(),
+		this.elements.menulist.css({
+			left: ( offset.left - this.elements.menulist.innerWidth() ) + this.elements.hitarea.width(),
 			top: offset.top + this.elements.hitarea.outerHeight(),
 		});
 	},
@@ -86,7 +85,14 @@ $.widget('ui.splitbutton', {
 
 					self.elements.hitarea.blur();
 				}
-			}).html( label );
+			}).hover(
+				function(){
+					$(this).addClass('ui-state-hover');
+				},
+				function(){
+					$(this).removeClass('ui-state-hover');
+				}
+			).addClass('ui-corner-all').html( label );
 
 			$( '<li />' )
 				.append( anchor )
@@ -98,7 +104,7 @@ $.widget('ui.splitbutton', {
 
 	destroy : function(){
 
-		this.elements.menubox.remove();
+		this.elements.menulist.remove();
 
 		this.element.buttonset('destroy');
 

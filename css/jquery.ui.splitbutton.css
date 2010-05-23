@@ -1,23 +1,21 @@
 .ui-splitbutton-menu {
 	position: absolute;
-	width: auto;
-	height: auto;
-	z-index: 9999;
-	background: #fff;
-	padding: 0;
 	left: -9999px;
+	z-index: 9999;
+	padding: 2px;
 	-moz-box-shadow: 2px 2px 5px #dfdfdf;
 	-webkit-box-shadow: 2px 2px 5px #dfdfdf;
 	box-shadow: 2px 2px 5px #dfdfdf;
+}
+.ui-splitbutton-menu a.ui-state-hover {
+	font-weight: normal;
+	margin: -1px;
 }
 .ui-splitbutton-menu li {
 	list-style: none;
 }
 .ui-splitbutton-menu li a {
 	display: block;
-	padding: .4em .5em;
+	padding: .3em .5em;
 	text-decoration: none;
-}
-.ui-splitbutton-menu li a:hover {
-	background: #eee;
 }
