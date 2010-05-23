@@ -32,44 +32,24 @@ $.widget('ui.splitbutton', {
 			}),
 			menulist: $('<ul />').appendTo('body')
 		};
-
-		this.elements.menulist.addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset');
-
+		
 		this.element.buttonset();
 
-		this.elements.menulist.width( 
-			this.options.width == 'inherit' ? 
-			this.elements.button.width() + this.elements.hitarea.width()  : 
-			this.options.width 
-		);
+		this.elements.menulist
+			.addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset')
+			.attr('role', 'listbox')
+			.width( 
+				this.options.width == 'inherit' ? 
+				this.elements.button.width() + this.elements.hitarea.width()  : 
+				this.options.width 
+			);
 
-		this._buildList();
-		
-		this.elements.hitarea.click( function(){
+		this._build();
 
-			$(this).css({ outline: 'none' }).focus();
-
-			self._positionBox();
-
-			self.elements.menulist.show();
-
-		}).bind( 'blur', function(){
-			
-			self.elements.menulist.hide();
-		});
+		this._bind();
 	},
 
-	_positionBox: function(){
-		
-		var offset = this.elements.hitarea.offset();
-
-		this.elements.menulist.css({
-			left: ( offset.left - this.elements.menulist.innerWidth() ) + this.elements.hitarea.width(),
-			top: offset.top + this.elements.hitarea.outerHeight(),
-		});
-	},
-
-	_buildList : function(){
+	_build : function(){
 
 		var self = this
 
@@ -95,11 +75,51 @@ $.widget('ui.splitbutton', {
 			).addClass('ui-corner-all').html( label );
 
 			$( '<li />' )
+				.attr('role', 'menuitem')
 				.append( anchor )
 				.addClass( 'ui-helper-reset' )
 				.appendTo( self.elements.menulist );
 
 		});
+	},
+	
+	_bind : function(){
+
+		var self = this;
+		
+		this.elements.hitarea
+		.bind( 'click', function(){
+
+			$(this).css({ outline: 'none' }).focus();
+
+			self.refresh();
+
+			self.open()
+		})
+		.bind( 'blur', function(){
+
+			self.close();
+		});
+	},
+	
+	refresh : function(){
+		
+		var offset = this.elements.hitarea.offset();
+
+		this.elements.menulist.css({
+			left: ( offset.left - this.elements.menulist.innerWidth() ) + this.elements.hitarea.width(),
+			top: offset.top + this.elements.hitarea.outerHeight(),
+		});
+	},
+
+	open : function(){
+		
+		this.elements.menulist.show();
+	},
+
+	close : function(){
+		
+		this.elements.menulist.hide();
 	},
 
 	destroy : function(){
