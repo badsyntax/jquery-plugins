@@ -93,7 +93,9 @@
 			this.element
 				.removeClass( 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all' )
 				.find( 'li' )
-				.removeClass( 'ui-helper-clearfix' );
+				.removeClass( 'ui-helper-clearfix' )
+				.find( 'a' )
+				.find('.ui-icon').remove();
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
