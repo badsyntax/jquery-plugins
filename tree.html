@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery UI Tree</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/jquery.ui.tree.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.ui.tree.js"></script>
+</head>
+<body>
+	<div>
+
+		<h2>Tree</h2>
+
+		<ul class="tree">
+			<li><a href="#">Item 1</a></li>
+			<li>
+				<a href="#">Item 2</a>
+				<ul>
+					<li><a href="#">Item 1</a></li>
+					<li><a href="#">Item 2</a></li>
+					<li><a href="#">Item 3</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Item 3</a></li>
+		</ul>
+
+		<br /><br />
+		
+		<button id="create">
+			Create tree
+		</button>
+		<button id="destroy">
+			Destroy tree
+		</button>
+	</div>
+
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+
+			$('.tree').tree();
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+
+			$('.tree').tree('destroy');
+
+		});
+
+	</script>
+</body>
+</html>

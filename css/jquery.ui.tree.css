@@ -1,0 +1,13 @@
+.ui-tree {
+	padding: .4em;
+}
+.ui-tree ul {
+	margin-left: 1.6em;
+}
+.ui-tree a {
+	display: block;
+	padding: .2em;
+}
+.ui-tree a.ui-state-hover {
+	margin: -1px;
+}
