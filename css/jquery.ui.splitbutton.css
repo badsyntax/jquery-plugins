@@ -1,0 +1,23 @@
+.ui-splitbutton-menu {
+	position: absolute;
+	width: auto;
+	height: auto;
+	z-index: 9999;
+	background: #fff;
+	padding: 0;
+	left: -9999px;
+	-moz-box-shadow: 2px 2px 5px #dfdfdf;
+	-webkit-box-shadow: 2px 2px 5px #dfdfdf;
+	box-shadow: 2px 2px 5px #dfdfdf;
+}
+.ui-splitbutton-menu li {
+	list-style: none;
+}
+.ui-splitbutton-menu li a {
+	display: block;
+	padding: .4em .5em;
+	text-decoration: none;
+}
+.ui-splitbutton-menu li a:hover {
+	background: #eee;
+}

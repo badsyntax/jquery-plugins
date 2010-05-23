@@ -1,5 +1,5 @@
 /*
- * jQuery UI Splitbutton 0.1
+ * jQuery UI Splitbutton
  *
  * @Author Richard Willis
  *
@@ -76,17 +76,15 @@ $.widget('ui.splitbutton', {
 
 		$.each(this.options.items, function(label){
 
-			var f = this;
+			var callback = this;
 
 			var anchor = $( '<a />' , {
 				href: '#',
 				mousedown: function(){
 
-					f.apply(this, arguments);
+					callback.apply( this, arguments );
 
 					self.elements.hitarea.blur();
-
-					return false;
 				}
 			}).html( label );
 
