@@ -13,19 +13,18 @@
 
 		options : {
 			width: 320,
-			icons: {
-				'listopen': 'ui-icon-triangle-1-s',
-				'listclosed': 'ui-icon-triangle-1-e'
-			}
+			theme: 'default'
 		},
 		
 		_create : function(){
 
 			var self = this, options = this.options;
+			
+			this.theme = this.themes[ this.options.theme ];
 
 			this.element
 				.width( this.options.width )
-				.addClass( 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all' )
+				.addClass( this.theme.list )
 				.find( 'li' )
 					.addClass( 'ui-helper-clearfix' )
 					.end()
@@ -35,7 +34,7 @@
 
 					if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
-						icon = childlist.is(':visible') ? options.icons.listopen : icon = options.icons.listclosed;
+						icon = childlist.is(':visible') ? self.theme.icons.listopen : icon = self.theme.icons.listclosed;
 					} else {
 
 						icon = 'ui-tree-icon-transparent';
@@ -50,7 +49,7 @@
 							var childlist = $( this ).data('childlist');
 
 							$( this )
-								.removeClass( options.icons.listopen + ' ' + options.icons.listclosed )
+								.removeClass( self.theme.icons.listopen + ' ' + self.theme.icons.listclosed )
 								.parent()
 									.next()
 									.toggle();
@@ -60,13 +59,13 @@
 
 								if ( childlist.is(':visible') ){
 									
-									$( this ).addClass( options.icons.listopen );
+									$( this ).addClass( self.theme.icons.listopen );
 
 									self._trigger('open', null, { list: childlist });
 
 								} else {
 									
-									$( this ).addClass( options.icons.listclosed );
+									$( this ).addClass( self.theme.icons.listclosed );
 
 									self._trigger('close', null, { list: childlist });
 								}
@@ -77,12 +76,21 @@
 							$( this ).trigger( 'toggle' );
 						});
 
-					$(this).hover(
+					$(this)
+					.click(function(event){
+
+						$(this).toggleClass( self.theme.itemactive );
+						
+						self._trigger( 'click', event, this );
+
+						return false;
+					})
+					.hover(
 						function(){
 							$( this ).addClass( 'ui-state-hover ui-corner-all' );
 						},
 						function(){
-							$( this ).removeClass( 'ui-state-hover ui-corner-all' );
+							$( this ).removeClass( 'ui-state-hover' );
 						}
 					);
 				});
@@ -91,15 +99,37 @@
 		destroy : function(){
 
 			this.element
-				.removeClass( 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all' )
+				.removeClass( this.theme.list )
 				.find( 'li' )
 				.removeClass( 'ui-helper-clearfix' )
 				.find( 'a' )
+				.unbind()
 				.find('.ui-icon').remove();
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
 	});
 
+	$.extend($.ui.tree.prototype, { 
+
+		themes: {
+			default: { 
+				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
+				itemactive: 'ui-tree-item-active',
+				icons: {
+					'listopen': 'ui-icon-triangle-1-s',
+					'listclosed': 'ui-icon-triangle-1-e'
+				}
+			},
+			minimal: {
+				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
+				itemactive: 'ui-tree-item-active',
+				icons: {
+					'listopen': 'ui-icon-minus',
+					'listclosed': 'ui-icon-plus'
+				}
+			}
+		}
+	});
 
 })(jQuery);
