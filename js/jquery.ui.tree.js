@@ -25,7 +25,16 @@
 
 			this.element
 				.width( options.width )
-				.addClass( this.theme.list )
+				.addClass( this.theme.list );
+
+			this._bind( this.element );
+		},
+
+		_bind : function( element ){
+
+			var self = this;
+			
+			element
 				.find( 'li' )
 					.addClass( 'ui-helper-clearfix' )
 					.end()
@@ -116,10 +125,12 @@
 						alert('Error loading the request.');
 					}
 
+					self._bind( childlist );
+
 					toggle();
 				}
 
-				childlist.load( this.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
+				childlist.hide().load( this.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
 
 			} else toggle();
 
