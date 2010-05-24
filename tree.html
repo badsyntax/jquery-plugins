@@ -21,7 +21,10 @@
 			<li>
 				<a href="#">Item 2</a>
 				<ul class="ui-helper-hidden">
-					<li><a href="#">Item 1</a></li>
+					<li>
+						<a href="#">Item 1</a>
+						<ul></ul>
+					</li>
 					<li><a href="#">Item 2</a></li>
 					<li>
 						<a href="#">Item 3</a>
@@ -68,7 +71,8 @@
 		$('#create').click(function(){
 
 			$('.tree').tree({
-				theme: 'default'
+				theme: 'default',
+				childlistURL: 'get-child-list.php'
 			});
 
 		}).trigger('click');
@@ -78,10 +82,11 @@
 			var info = [];
 
 			$('.tree').tree('selected').each(function(){
+
 				info.push( $(this).text() );
 			});
 
-			$('#selected-info').html( info.join( '<br />' ) );
+			$('#selected-info').html( info.join( '<br />' ) || 0 );
 		});
 
 		$('#destroy').click(function(){

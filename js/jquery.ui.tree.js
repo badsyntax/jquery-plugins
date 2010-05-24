@@ -13,17 +13,18 @@
 
 		options : {
 			width: 320,
-			theme: 'default'
+			theme: 'default',
+			childlistURL: ''
 		},
 		
 		_create : function(){
 
 			var self = this, options = this.options;
 			
-			this.theme = this.themes[ this.options.theme ];
+			this.theme = this.themes[ options.theme ];
 
 			this.element
-				.width( this.options.width )
+				.width( options.width )
 				.addClass( this.theme.list )
 				.find( 'li' )
 					.addClass( 'ui-helper-clearfix' )
@@ -34,7 +35,7 @@
 
 					if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
-						icon = childlist.is(':visible') ? 
+						icon = ( childlist.is(':visible') && childlist.children().length ) ? 
 							self.theme.icons.listopen : 
 							self.theme.icons.listclosed;
 					} else {
@@ -78,30 +79,50 @@
 
 		_toggle : function( hitarea ){
 
-			var self = this, childlist = hitarea.data('childlist');
+			var self = this, theme = this.theme, childlist = hitarea.data('childlist');
 
-			hitarea
-				.removeClass( self.theme.icons.listopen + ' ' + self.theme.icons.listclosed )
-				.parent()
-					.next()
-					.toggle();
+			function toggle(){
+
+				hitarea
+					.removeClass( theme.icons.listopen + ' ' + theme.icons.listclosed )
+					.parent()
+						.next()
+						.toggle();
 
 
-			if ( childlist.length ){
+				if ( childlist.length ){
 
-				if ( childlist.is(':visible') ){
-					
-					$( hitarea ).addClass( self.theme.icons.listopen );
+					if ( childlist.is(':visible') ){
+						
+						hitarea.addClass( theme.icons.listopen );
 
-					self._trigger('open', null, { list: childlist });
+						self._trigger('open', null, { list: childlist });
 
-				} else {
-					
-					$( hitarea ).addClass( self.theme.icons.listclosed );
+					} else {
+						
+						hitarea.addClass( theme.icons.listclosed );
 
-					self._trigger('close', null, { list: childlist });
+						self._trigger('close', null, { list: childlist });
+					}
 				}
 			}
+
+			if ( !childlist.children().length && this.options.childlistURL ) {
+
+				function complete( response, status, xhr ){
+
+					if ( status == 'error' ) {
+
+						alert('Error loading the request.');
+					}
+
+					toggle();
+				}
+
+				childlist.load( this.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
+
+			} else toggle();
+
 		},
 
 		selected : function(){
