@@ -104,6 +104,11 @@
 			}
 		},
 
+		selected : function(){
+
+			return this.element.find( '.' + this.theme.itemactive );
+		},
+
 		destroy : function(){
 
 			this.element
