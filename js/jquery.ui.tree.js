@@ -109,10 +109,12 @@
 			this.element
 				.removeClass( this.theme.list )
 				.find( 'li' )
-				.removeClass( 'ui-helper-clearfix' )
+					.removeClass( 'ui-helper-clearfix' )
 				.find( 'a' )
-				.unbind()
-				.find('.ui-icon').remove();
+					.removeClass( this.theme.itemactive + ' ui-corner-all' )
+					.unbind()
+				.find('.ui-icon')
+					.remove();
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}

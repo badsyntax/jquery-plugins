@@ -1,3 +1,11 @@
+A central repository for some of my smaller jQuery plugins and widgets.
+
 Demos:
 
 http://badsyntax.github.com/splitbutton.html
+
+Older plugins that have not yet been imported into Github:
+
+http://jquery-snakey.googlecode.com
+http://jquery-spellchecker.googlecode.com
+http://jquery-youtube-player.googlecode.com
