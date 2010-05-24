@@ -19,12 +19,12 @@
 		
 		_create : function(){
 
-			var self = this, options = this.options;
+			var self = this;
 			
-			this.theme = this.themes[ options.theme ];
+			this.theme = this.themes[ this.options.theme ];
 
 			this.element
-				.width( options.width )
+				.width( this.options.width )
 				.addClass( this.theme.list );
 
 			this._bind( this.element );
@@ -42,7 +42,7 @@
 
 					self._buildHitarea( this );
 
-					$(this)
+					$( this )
 					.click(function( event ){
 
 						if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
@@ -74,6 +74,11 @@
 		_buildHitarea : function( anchor ){
 
 			var self = this, theme = this.theme, icon, childlist = $( anchor ).next();
+
+			if ( !childlist.children().length) {
+
+				childlist.hide();
+			}
 
 			if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
@@ -130,7 +135,7 @@
 					open( hitarea );
 				}
 
-				childlist.hide().load( self.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
+				childlist.hide().load( self.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 }, complete );
 
 			} else open( hitarea );
 		},
