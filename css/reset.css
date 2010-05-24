@@ -15,3 +15,8 @@ h1 {
 h2 {
 	font-size: 140%;
 }
+#theme-switcher {
+	position: absolute;
+	right: 1em;
+	top: 1em;
+}

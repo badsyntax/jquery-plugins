@@ -32,7 +32,7 @@
 
 		_bind : function( element ){
 
-			var self = this;
+			var self = this, theme = this.theme;
 			
 			element
 				.find( 'li' )
@@ -45,15 +45,15 @@
 					if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
 						icon = ( childlist.is(':visible') && childlist.children().length ) ? 
-							self.theme.icons.listopen : 
-							self.theme.icons.listclosed;
+							theme.icons.listopen : 
+							theme.icons.listclosed;
 					} else {
 						icon = 'ui-tree-icon-transparent';
 					}
 
 					$('<span />')
 						.data('childlist', childlist)
-						.addClass( 'ui-tree-hitarea ui-icon ' + icon )
+						.addClass( theme.hitarea + ' ui-icon ' + icon )
 						.prependTo( this )
 						.bind('toggle', function(){
 							self._toggle.call( self, $(this) );
@@ -62,7 +62,7 @@
 					$(this)
 					.click(function(event){
 
-						if ( /ui-tree-hitarea/.test( event.target.className ) ) {
+						if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
 
 							$( event.target ).trigger( 'toggle' );
 
@@ -150,7 +150,7 @@
 				.find( 'a' )
 					.removeClass( this.theme.itemactive + ' ui-corner-all' )
 					.unbind()
-				.find('.ui-icon')
+				.find( '.ui-icon' )
 					.remove();
 
 			$.Widget.prototype.destroy.apply(this, arguments);
@@ -162,6 +162,7 @@
 		themes: {
 			default: { 
 				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
+				hitarea: 'ui-tree-hitarea',
 				itemactive: 'ui-tree-item-active',
 				icons: {
 					'listopen': 'ui-icon-triangle-1-s',
@@ -170,6 +171,7 @@
 			},
 			minimal: {
 				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
+				hitarea: 'ui-tree-hitarea',
 				itemactive: 'ui-tree-item-active',
 				icons: {
 					'listopen': 'ui-icon-minus',
