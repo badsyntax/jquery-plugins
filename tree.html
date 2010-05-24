@@ -60,9 +60,14 @@
 		<button id="selected">
 			Get selected
 		</button>
-		<div id="selected-info">
+		<button id="expand">
+			Expand all
+		</button>
+		<button id="collapse">
+			Collapse all
+		</button>
+		<div id="selected-info"></div>
 
-		</div>
 	</div>
 	
 	<script type="text/javascript" src="js/themeswitchertool.js"></script>
@@ -89,6 +94,16 @@
 			});
 
 			$('#selected-info').html( info.join( '<br />' ) || 0 );
+		});
+
+		$('#expand').click(function(){
+
+			$('.tree').tree('expand');
+		});
+
+		$('#collapse').click(function(){
+			
+			$('.tree').tree('collapse');
 		});
 
 		$('#destroy').click(function(){

@@ -40,27 +40,10 @@
 					.end()
 				.find( 'a' ).each(function(){
 
-					var icon, childlist = $(this).next();
-
-					if ( childlist.length && childlist[0].nodeName == 'UL' ){
-
-						icon = ( childlist.is(':visible') && childlist.children().length ) ? 
-							theme.icons.listopen : 
-							theme.icons.listclosed;
-					} else {
-						icon = 'ui-tree-icon-transparent';
-					}
-
-					$('<span />')
-						.data('childlist', childlist)
-						.addClass( theme.hitarea + ' ui-icon ' + icon )
-						.prependTo( this )
-						.bind('toggle', function(){
-							self._toggle.call( self, $(this) );
-						});
+					self._buildHitarea( this );
 
 					$(this)
-					.click(function(event){
+					.click(function( event ){
 
 						if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
 
@@ -69,7 +52,7 @@
 							return false;
 						}
 
-						$(this).toggleClass( self.theme.itemactive );
+						$( this ).toggleClass( self.theme.itemactive );
 						
 						self._trigger( 'click', event, this );
 
@@ -77,46 +60,63 @@
 					})
 					.hover(
 						function(){
+
 							$( this ).addClass( 'ui-state-hover ui-corner-all' );
 						},
 						function(){
+
 							$( this ).removeClass( 'ui-state-hover' );
 						}
 					);
 				});
 		},
 
-		_toggle : function( hitarea ){
+		_buildHitarea : function( anchor ){
+
+			var self = this, theme = this.theme, icon, childlist = $( anchor ).next();
+
+			if ( childlist.length && childlist[0].nodeName == 'UL' ){
+
+				icon = ( childlist.is(':visible') && childlist.children().length ) ? 
+					theme.icons.listopen : 
+					theme.icons.listclosed;
+
+			} else {
+				icon = 'ui-tree-icon-transparent';
+			}
+
+			$('<span />')
+				.addClass( theme.hitarea + ' ui-icon ' + icon )
+				.data('childlist', childlist)
+				.prependTo( anchor )
+				.bind('toggle', function( event ){
+
+					self._toggle( $(this), event );
+				})
+				.bind('open', function( event ){
+
+					self._open( $(this), event );
+				})
+				.bind('close', function( event ){
+
+					self._close( $(this), event );
+				});
+		},
+
+		_open : function( hitarea, event ){
 
 			var self = this, theme = this.theme, childlist = hitarea.data('childlist');
 
-			function toggle(){
+			function open( hitarea ){
 
-				hitarea
-					.removeClass( theme.icons.listopen + ' ' + theme.icons.listclosed )
-					.parent()
-						.next()
-						.toggle();
+				hitarea.addClass( theme.icons.listopen );
 
+				childlist.show();
 
-				if ( childlist.length ){
-
-					if ( childlist.is(':visible') ){
-						
-						hitarea.addClass( theme.icons.listopen );
-
-						self._trigger('open', null, { list: childlist });
-
-					} else {
-						
-						hitarea.addClass( theme.icons.listclosed );
-
-						self._trigger('close', null, { list: childlist });
-					}
-				}
+				self._trigger('open', event, { list: childlist });
 			}
-
-			if ( !childlist.children().length && this.options.childlistURL ) {
+			
+			if ( !childlist.children().length && self.options.childlistURL ) {
 
 				function complete( response, status, xhr ){
 
@@ -127,18 +127,55 @@
 
 					self._bind( childlist );
 
-					toggle();
+					open( hitarea );
 				}
 
-				childlist.hide().load( this.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
+				childlist.hide().load( self.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 } , complete );
 
-			} else toggle();
+			} else open( hitarea );
+		},
 
+		_close : function( hitarea, event ){
+
+			var childlist = hitarea.data('childlist');
+
+			hitarea.removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
+
+			childlist.hide();
+
+			this._trigger('close', event, { list: childlist });
+		},
+
+		_toggle : function( hitarea ){
+
+			var childlist = hitarea.data('childlist');
+
+			if ( childlist.length ){
+
+				if ( childlist.is(':visible') ){
+
+					hitarea.trigger( 'close' );
+						
+				} else {
+						
+					hitarea.trigger( 'open' );
+				}
+			}
 		},
 
 		selected : function(){
 
 			return this.element.find( '.' + this.theme.itemactive );
+		},
+
+		expand : function(){
+	
+			this.element.find( '.' + this.theme.hitarea ).trigger( 'open' );
+		},
+
+		collapse : function(){
+
+			this.element.find( '.' + this.theme.hitarea ).trigger( 'close' );
 		},
 
 		destroy : function(){
