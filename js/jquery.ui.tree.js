@@ -34,9 +34,10 @@
 
 					if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
-						icon = childlist.is(':visible') ? self.theme.icons.listopen : icon = self.theme.icons.listclosed;
+						icon = childlist.is(':visible') ? 
+							self.theme.icons.listopen : 
+							self.theme.icons.listclosed;
 					} else {
-
 						icon = 'ui-tree-icon-transparent';
 					}
 
@@ -45,39 +46,18 @@
 						.addClass( 'ui-tree-hitarea ui-icon ' + icon )
 						.prependTo( this )
 						.bind('toggle', function(){
-
-							var childlist = $( this ).data('childlist');
-
-							$( this )
-								.removeClass( self.theme.icons.listopen + ' ' + self.theme.icons.listclosed )
-								.parent()
-									.next()
-									.toggle();
-
-
-							if ( childlist.length ){
-
-								if ( childlist.is(':visible') ){
-									
-									$( this ).addClass( self.theme.icons.listopen );
-
-									self._trigger('open', null, { list: childlist });
-
-								} else {
-									
-									$( this ).addClass( self.theme.icons.listclosed );
-
-									self._trigger('close', null, { list: childlist });
-								}
-							}
-						})
-						.bind('click', function(){
-
-							$( this ).trigger( 'toggle' );
+							self._toggle.call( self, $(this) );
 						});
 
 					$(this)
 					.click(function(event){
+
+						if ( /ui-tree-hitarea/.test( event.target.className ) ) {
+
+							$( event.target ).trigger( 'toggle' );
+
+							return false;
+						}
 
 						$(this).toggleClass( self.theme.itemactive );
 						
@@ -94,6 +74,34 @@
 						}
 					);
 				});
+		},
+
+		_toggle : function( hitarea ){
+
+			var self = this, childlist = hitarea.data('childlist');
+
+			hitarea
+				.removeClass( self.theme.icons.listopen + ' ' + self.theme.icons.listclosed )
+				.parent()
+					.next()
+					.toggle();
+
+
+			if ( childlist.length ){
+
+				if ( childlist.is(':visible') ){
+					
+					$( hitarea ).addClass( self.theme.icons.listopen );
+
+					self._trigger('open', null, { list: childlist });
+
+				} else {
+					
+					$( hitarea ).addClass( self.theme.icons.listclosed );
+
+					self._trigger('close', null, { list: childlist });
+				}
+			}
 		},
 
 		destroy : function(){
