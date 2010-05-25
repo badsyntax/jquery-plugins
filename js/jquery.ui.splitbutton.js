@@ -33,7 +33,9 @@
 				menulist: $('<ul />').appendTo('body')
 			};
 			
-			this.element.buttonset();
+			this.element
+				.addClass( 'ui-splitbutton' )
+				.buttonset();
 			
 			this.elements.hitarea
 				.attr('role', 'hitarea')
@@ -41,12 +43,7 @@
 
 			this.elements.menulist
 				.addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset')
-				.attr('role', 'listbox')
-				.width( 
-					this.options.width == 'inherit' ? 
-					this.elements.button.width() + this.elements.hitarea.width()  : 
-					this.options.width 
-				);
+				.attr('role', 'listbox');
 
 			this._build();
 
@@ -108,10 +105,21 @@
 			this.elements.menulist
 			.bind('show', function(){
 
-				var offset = self.elements.hitarea.offset();
+				var offset = self.elements.hitarea.offset(), width = self.options.width;
 
-				self.elements.menulist.css({
-					left: ( offset.left - self.elements.menulist.innerWidth() ) + self.elements.hitarea.width(),
+				if ( width = 'inherit' ) {
+
+					self.elements.menulist.width( 'auto ');
+
+					var padding = ( self.elements.menulist.outerWidth() - self.elements.menulist.width() ) / 2;
+
+					width = self.element.width() - padding;
+				}
+
+				self.elements.menulist
+				.width( width )
+				.css({
+					left: ( offset.left - self.elements.menulist.outerWidth() ) + self.elements.hitarea.width(),
 					top: offset.top + self.elements.hitarea.outerHeight(),
 				});
 			})

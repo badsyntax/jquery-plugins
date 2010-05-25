@@ -1,3 +1,6 @@
+.ui-splitbutton {
+	float: left;
+}
 .ui-splitbutton-menu {
 	position: absolute;
 	z-index: 9999;
