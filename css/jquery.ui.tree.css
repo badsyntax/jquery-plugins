@@ -25,3 +25,7 @@
 	height: 1.5em; 
 	line-height: 1.2em;
 }
+.ui-tree-load {
+	background-image: url(/img/ajax_loader.gif) !important;
+	background-position: center center !important;
+}

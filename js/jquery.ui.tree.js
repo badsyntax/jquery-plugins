@@ -71,12 +71,13 @@
 					);
 				});
 
-			( this.options.sortable && $.isFunction( $.fn.sortable ) ) && 
+			if ( this.options.sortable && $.isFunction( $.fn.sortable ) ) {
 
 				$([ this.element, this.element.find('ul') ]).sortable({
 					placeholder: 'ui-state-highlight ui-tree-placeholder',
 					connectWith: self.element.find('ul').not( this )
 				}).disableSelection();
+			}
 		},
 
 		_buildHitarea : function( anchor ){
@@ -136,12 +137,18 @@
 					if ( status == 'error' ) {
 
 						alert('Error loading the request.');
+
+						return;
 					}
+
+					hitarea.removeClass( 'ui-tree-load' );
 
 					self._bind( childlist );
 
 					open( hitarea );
 				}
+
+				hitarea.addClass( 'ui-tree-load' );
 
 				childlist.hide().load( self.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 }, complete );
 
