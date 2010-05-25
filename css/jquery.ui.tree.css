@@ -21,3 +21,7 @@
 .ui-tree-item-active {
 	font-weight: bold;
 }
+.ui-tree-placeholder {
+	height: 1.5em; 
+	line-height: 1.2em;
+}

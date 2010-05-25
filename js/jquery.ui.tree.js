@@ -14,7 +14,8 @@
 		options : {
 			width: 320,
 			theme: 'default',
-			childlistURL: ''
+			childlistURL: '',
+			sortable: false
 		},
 		
 		_create : function(){
@@ -69,6 +70,13 @@
 						}
 					);
 				});
+
+			( this.options.sortable && $.isFunction( $.fn.sortable ) ) && 
+
+				$([ this.element, this.element.find('ul') ]).sortable({
+					placeholder: 'ui-state-highlight ui-tree-placeholder',
+					connectWith: self.element.find('ul').not( this )
+				}).disableSelection();
 		},
 
 		_buildHitarea : function( anchor ){
@@ -202,7 +210,7 @@
 	$.extend($.ui.tree.prototype, { 
 
 		themes: {
-			default: { 
+			'default': { 
 				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
 				hitarea: 'ui-tree-hitarea',
 				itemactive: 'ui-tree-item-active',
