@@ -15,7 +15,8 @@
 			width: 320,
 			theme: 'default',
 			childlistURL: '',
-			sortable: false
+			sortable: false,
+			icon: 'ui-icon-document'
 		},
 		
 		_create : function(){
@@ -42,6 +43,8 @@
 				.find( 'a' ).each(function(){
 
 					self._buildHitarea( this );
+
+					self._buildIcon( this );
 
 					$( this )
 					.click(function( event ){
@@ -82,21 +85,18 @@
 
 		_buildHitarea : function( anchor ){
 
-			var self = this, theme = this.theme, icon, childlist = $( anchor ).next();
+			var self = this, theme = this.theme, icon = 'ui-tree-icon-transparent', childlist = $( anchor ).next();
 
 			if ( !childlist.children().length) {
 
 				childlist.hide();
 			}
-
+				
 			if ( childlist.length && childlist[0].nodeName == 'UL' ){
 
 				icon = ( childlist.is(':visible') && childlist.children().length ) ? 
 					theme.icons.listopen : 
 					theme.icons.listclosed;
-
-			} else {
-				icon = 'ui-tree-icon-transparent';
 			}
 
 			$('<span />')
@@ -115,6 +115,15 @@
 
 					self._close( $(this), event );
 				});
+		},
+
+		_buildIcon : function( anchor ) {
+
+			if (!this.options.icon) return;
+			
+			$('<span />')
+				.addClass( 'ui-icon ' + this.options.icon )
+				.appendTo( anchor );
 		},
 
 		_open : function( hitarea, event ){
