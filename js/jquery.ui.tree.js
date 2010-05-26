@@ -14,9 +14,10 @@
 		options : {
 			width: 320,
 			theme: 'default',
-			childlistURL: '',
+			nodeDataURL: '',
 			sortable: false,
-			icon: 'ui-icon-document'
+			icon: 'ui-icon-document',
+			parentAsFolder: true
 		},
 		
 		_create : function(){
@@ -38,42 +39,83 @@
 			
 			element
 				.find( 'li' )
-					.addClass( 'ui-helper-clearfix' )
-					.end()
+				.addClass( 'ui-helper-clearfix' )
 				.find( 'a' ).each(function(){
 
-					self._buildHitarea( this );
+					var list = $( this ).next();
+					
+					list =  ( list.length && list[0].nodeName == 'UL' ) ? list : false;
+					
+					var hitarea = self._buildHitarea( this, list );
 
-					self._buildIcon( this );
+					var icon = self._buildIcon( this, list );
+			
+					if ( list ) {
 
-					$( this )
-					.click(function( event ){
+						( !list.children().length ) && list.hide();
 
-						if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
-
-							$( event.target ).trigger( 'toggle' );
-
-							return false;
-						}
-
-						$( this ).toggleClass( self.theme.itemactive );
-						
-						self._trigger( 'click', event, this );
-
-						return false;
-					})
-					.hover(
-						function(){
-
-							$( this ).addClass( 'ui-state-hover ui-corner-all' );
-						},
-						function(){
-
-							$( this ).removeClass( 'ui-state-hover' );
-						}
-					);
+						//  bind custom even to list
+						self._bindList( list, hitarea );
+					}
+					
+					self._bindAnchor( this );
 				});
+		},
+		
+		_buildHitarea : function( anchor, list ){
 
+			var theme = this.theme, icon = 'ui-tree-icon-transparent';
+
+			if ( list ){
+
+				icon = ( list.is(':visible') && list.children().length ) ? 
+					theme.icons.listopen : 
+					theme.icons.listclosed;
+			}
+
+			return $('<span />')
+				.addClass( theme.hitarea + ' ui-icon ' + icon )
+				.data('list', list)
+				.prependTo( anchor );
+		},
+
+		_buildIcon : function( anchor, list ) {
+
+			var icon = this.options.icon;
+
+			if ( !icon ) return;
+
+			if ( list && this.options.parentAsFolder ){
+				icon = this.theme.folderCollapsed;
+			}
+			
+			return $('<span />')
+				.addClass( 'ui-icon ' + icon )
+				.appendTo( anchor )
+				.bind('toggle', function( event) {
+					
+				});
+		},
+
+
+		_bindList : function( list, hitarea ){
+
+			var self = this;
+
+			$( list )
+			.bind('toggle', function( event ){
+
+				self._toggle( this, event, hitarea );
+			})
+			.bind('open', function( event ){
+
+				self._open( this, event, hitarea );
+			})
+			.bind('close', function( event ){
+
+				self._close( this, event, hitarea );
+			});
+			
 			if ( this.options.sortable && $.isFunction( $.fn.sortable ) ) {
 
 				$([ this.element, this.element.find('ul') ]).sortable({
@@ -83,63 +125,54 @@
 			}
 		},
 
-		_buildHitarea : function( anchor ){
+		_bindAnchor : function( anchor ){
 
-			var self = this, theme = this.theme, icon = 'ui-tree-icon-transparent', childlist = $( anchor ).next();
+			var self = this, theme = this.theme;
 
-			if ( !childlist.children().length) {
+			$( anchor )
+			.click(function( event ){
 
-				childlist.hide();
-			}
+				if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
+
+					$( event.target ).data('list').trigger( 'toggle' );
+
+					return false;
+				}
+
+				$( this ).toggleClass( self.theme.itemselected );
 				
-			if ( childlist.length && childlist[0].nodeName == 'UL' ){
+				self._trigger( 'click', event, this );
 
-				icon = ( childlist.is(':visible') && childlist.children().length ) ? 
-					theme.icons.listopen : 
-					theme.icons.listclosed;
-			}
+				return false;
+			})
+			.hover(
+				function(){
 
-			$('<span />')
-				.addClass( theme.hitarea + ' ui-icon ' + icon )
-				.data('childlist', childlist)
-				.prependTo( anchor )
-				.bind('toggle', function( event ){
+					$( this ).addClass( 'ui-state-hover ui-corner-all' );
+				},
+				function(){
 
-					self._toggle( $(this), event );
-				})
-				.bind('open', function( event ){
-
-					self._open( $(this), event );
-				})
-				.bind('close', function( event ){
-
-					self._close( $(this), event );
-				});
+					$( this ).removeClass( 'ui-state-hover' );
+				}
+			);
 		},
 
-		_buildIcon : function( anchor ) {
+		_open : function( list, event, hitarea ){
 
-			if (!this.options.icon) return;
-			
-			$('<span />')
-				.addClass( 'ui-icon ' + this.options.icon )
-				.appendTo( anchor );
-		},
+			list = $( list );
 
-		_open : function( hitarea, event ){
-
-			var self = this, theme = this.theme, childlist = hitarea.data('childlist');
+			var self = this, theme = this.theme;
 
 			function open( hitarea ){
 
 				hitarea.addClass( theme.icons.listopen );
 
-				childlist.show();
+				list.show();
 
-				self._trigger('open', event, { list: childlist });
+				self._trigger('open', event, { list: list });
 			}
-			
-			if ( !childlist.children().length && self.options.childlistURL ) {
+
+			if ( !list.children().length && self.options.nodeDataURL ) {
 
 				function complete( response, status, xhr ){
 
@@ -152,59 +185,59 @@
 
 					hitarea.removeClass( 'ui-tree-load' );
 
-					self._bind( childlist );
+					self._bind( list );
 
 					open( hitarea );
 				}
 
 				hitarea.addClass( 'ui-tree-load' );
 
-				childlist.hide().load( self.options.childlistURL, { page: hitarea.parent().attr('rel') || 0 }, complete );
+				list.hide().load( self.options.nodeDataURL, { page: hitarea.parent().attr('rel') || 0 }, complete );
 
 			} else open( hitarea );
 		},
 
-		_close : function( hitarea, event ){
+		_close : function( list, event, hitarea ){
 
-			var childlist = hitarea.data('childlist');
+			list = $( list );
 
 			hitarea.removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
 
-			childlist.hide();
+			list.hide();
 
-			this._trigger('close', event, { list: childlist });
+			this._trigger('close', event, { list: list });
 		},
 
-		_toggle : function( hitarea ){
+		_toggle : function( list, event, hitarea ){
 
-			var childlist = hitarea.data('childlist');
+			list = $( list );
 
-			if ( childlist.length ){
+			if ( list.length ){
 
-				if ( childlist.is(':visible') ){
+				if ( list.is(':visible') ){
 
-					hitarea.trigger( 'close' );
+					list.trigger( 'close' );
 						
 				} else {
 						
-					hitarea.trigger( 'open' );
+					list.trigger( 'open' );
 				}
 			}
 		},
 
 		selected : function(){
 
-			return this.element.find( '.' + this.theme.itemactive );
+			return this.element.find( '.' + this.theme.itemselected );
 		},
 
 		expand : function(){
 	
-			this.element.find( '.' + this.theme.hitarea ).trigger( 'open' );
+			this.element.find( 'ul' ).trigger( 'open' );
 		},
 
 		collapse : function(){
 
-			this.element.find( '.' + this.theme.hitarea ).trigger( 'close' );
+			this.element.find( 'ul' ).trigger( 'close' );
 		},
 
 		destroy : function(){
@@ -214,7 +247,7 @@
 				.find( 'li' )
 					.removeClass( 'ui-helper-clearfix' )
 				.find( 'a' )
-					.removeClass( this.theme.itemactive + ' ui-corner-all' )
+					.removeClass( this.theme.itemselected + ' ui-corner-all' )
 					.unbind()
 				.find( '.ui-icon' )
 					.remove();
@@ -229,7 +262,9 @@
 			'default': { 
 				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
 				hitarea: 'ui-tree-hitarea',
-				itemactive: 'ui-tree-item-active',
+				folderCollapsed: 'ui-icon-folder-collapsed',
+				folderOpen: 'ui-icon-folder-open',
+				itemselected: 'ui-tree-item-active',
 				icons: {
 					'listopen': 'ui-icon-triangle-1-s',
 					'listclosed': 'ui-icon-triangle-1-e'
@@ -238,7 +273,9 @@
 			minimal: {
 				list: 'ui-helper-reset ui-tree ui-widget ui-widget-content ui-corner ui-corner-all',
 				hitarea: 'ui-tree-hitarea',
-				itemactive: 'ui-tree-item-active',
+				folderCollapsed: 'ui-icon-folder-collapsed',
+				folderOpen: 'ui-icon-folder-open',
+				itemselected: 'ui-tree-item-active',
 				icons: {
 					'listopen': 'ui-icon-minus',
 					'listclosed': 'ui-icon-plus'
