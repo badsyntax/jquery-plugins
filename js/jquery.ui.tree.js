@@ -7,7 +7,7 @@
  *
  */
 
-(function($) {
+(function( $ ) {
 
 	$.widget('ui.tree', {
 
@@ -58,13 +58,13 @@
 						self._bindList( list, hitarea );
 					}
 					
-					self._bindAnchor( this );
+					self._bindAnchor( this, list, hitarea );
 				});
 		},
 		
 		_buildHitarea : function( anchor, list ){
 
-			var theme = this.theme, icon = 'ui-tree-icon-transparent';
+			var self = this, theme = this.theme, icon = 'ui-tree-icon-transparent';
 
 			if ( list ){
 
@@ -91,10 +91,7 @@
 			
 			return $('<span />')
 				.addClass( 'ui-icon ' + icon )
-				.appendTo( anchor )
-				.bind('toggle', function( event) {
-					
-				});
+				.appendTo( anchor );
 		},
 
 
@@ -103,17 +100,18 @@
 			var self = this;
 
 			$( list )
+			.data('hitarea', hitarea)
 			.bind('toggle', function( event ){
 
-				self._toggle( this, event, hitarea );
+				self._toggle( this, event );
 			})
 			.bind('open', function( event ){
 
-				self._open( this, event, hitarea );
+				self._open( this, event );
 			})
 			.bind('close', function( event ){
 
-				self._close( this, event, hitarea );
+				self._close( this, event );
 			});
 			
 			if ( this.options.sortable && $.isFunction( $.fn.sortable ) ) {
@@ -125,7 +123,7 @@
 			}
 		},
 
-		_bindAnchor : function( anchor ){
+		_bindAnchor : function( anchor, list ){
 
 			var self = this, theme = this.theme;
 
@@ -134,7 +132,7 @@
 
 				if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
 
-					$( event.target ).data('list').trigger( 'toggle' );
+					self._toggle( list, event );
 
 					return false;
 				}
@@ -157,11 +155,12 @@
 			);
 		},
 
-		_open : function( list, event, hitarea ){
+		_open : function( list, event ){
 
 			list = $( list );
 
-			var self = this, theme = this.theme;
+
+			var self = this, theme = this.theme, hitarea = list.data('hitarea');
 
 			function open( hitarea ){
 
@@ -197,18 +196,18 @@
 			} else open( hitarea );
 		},
 
-		_close : function( list, event, hitarea ){
+		_close : function( list, event ){
 
 			list = $( list );
 
-			hitarea.removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
+			list.data('hitarea').removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
 
 			list.hide();
 
 			this._trigger('close', event, { list: list });
 		},
 
-		_toggle : function( list, event, hitarea ){
+		_toggle : function( list, event ){
 
 			list = $( list );
 
@@ -216,11 +215,11 @@
 
 				if ( list.is(':visible') ){
 
-					list.trigger( 'close' );
+					this._close( list, event );
 						
 				} else {
-						
-					list.trigger( 'open' );
+					
+					this._open( list, event );
 				}
 			}
 		},
@@ -284,4 +283,4 @@
 		}
 	});
 
-})(jQuery);
+})( jQuery );
