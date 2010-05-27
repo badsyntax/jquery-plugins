@@ -18,7 +18,7 @@
 			sortable: false,
 			animateSpeed: 300,
 			checkbox: false,
-			icon: 'ui-icon-document',
+			icons: true,
 			parentAsFolder: true
 		},
 		
@@ -52,7 +52,7 @@
 
 					var icon = self._buildIcon( this, list, hitarea );
 
-					var checkbox = self._buildCheckbox( this, list, icon );
+					var checkbox = self._buildCheckbox( this, list, hitarea, icon );
 			
 					if ( list ) {
 
@@ -85,9 +85,9 @@
 
 		_buildIcon : function( anchor, list, hitarea ) {
 
-			var icon = this.options.icon;
+			if ( !this.options.icons ) return;
 
-			if ( !icon ) return;
+			var icon = this.theme.icons['default'];
 
 			if ( list && this.options.parentAsFolder ){
 				icon = this.theme.folderCollapsed;
@@ -102,7 +102,7 @@
 			return element;
 		},
 
-		_buildCheckbox : function( anchor, list, icon ){
+		_buildCheckbox : function( anchor, list, hitarea, icon ){
 
 			if ( !this.options.checkbox ) return false;
 
@@ -111,10 +111,11 @@
 				.addClass( 'ui-helper-reset' + ' ' + this.theme.checkbox )
 				.attr('id', $( anchor ).attr('rel') );
 
-			icon.after( element );
+			var el = icon || hitarea;
+
+			el.after( element );
 
 			return element;
-
 		},
 
 		_bindList : function( list, hitarea ){
@@ -170,7 +171,7 @@
 
 				else {
 
-					$( this ).toggleClass( tree.theme.itemselected );
+					$( this ).toggleClass( self.theme.itemselected );
 
 					if ( self.options.checkbox ) {
 				
@@ -183,10 +184,10 @@
 						}
 					}
 					
-					tree._trigger( 'click', event, this );
-				}
+					self._trigger( 'click', event, this );
 
-				return false;
+					return false;
+				}
 			})
 			.hover(
 				function(){
@@ -297,6 +298,9 @@
 					.removeClass( this.theme.itemselected + ' ui-corner-all' )
 					.unbind()
 				.find( '.ui-icon' )
+					.remove()
+					.end()
+				.find( '.' + this.theme.checkbox )
 					.remove();
 
 			$.Widget.prototype.destroy.apply(this, arguments);
@@ -314,6 +318,7 @@
 				itemselected: 'ui-tree-item-active',
 				checkbox: 'ui-tree-checkbox',
 				icons: {
+					'default' : 'ui-icon-document',
 					'listopen': 'ui-icon-triangle-1-s',
 					'listclosed': 'ui-icon-triangle-1-e'
 				}
@@ -326,6 +331,7 @@
 				itemselected: 'ui-tree-item-active',
 				checkbox: 'ui-tree-checkbox',
 				icons: {
+					'default' : 'ui-icon-document',
 					'listopen': 'ui-icon-minus',
 					'listclosed': 'ui-icon-plus'
 				}
