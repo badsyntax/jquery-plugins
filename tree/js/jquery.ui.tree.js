@@ -4,6 +4,8 @@
  * @Author Richard Willis
  *
  * @Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  *
  */
 
