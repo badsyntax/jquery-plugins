@@ -16,6 +16,7 @@
 			theme: 'default',
 			nodeDataURL: '',
 			sortable: false,
+			animateSpeed: 300,
 			icon: 'ui-icon-document',
 			parentAsFolder: true
 		},
@@ -166,7 +167,7 @@
 
 				hitarea.addClass( theme.icons.listopen );
 
-				list.show();
+				list.slideDown( self.options.animateSpeed );
 
 				self._trigger('open', event, { list: list });
 			}
@@ -202,7 +203,7 @@
 
 			list.data('hitarea').removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
 
-			list.hide();
+			list.slideUp( this.options.animateSpeed );
 
 			this._trigger('close', event, { list: list });
 		},
