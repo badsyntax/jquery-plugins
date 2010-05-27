@@ -17,6 +17,7 @@
 			nodeDataURL: '',
 			sortable: false,
 			animateSpeed: 300,
+			checkbox: false,
 			icon: 'ui-icon-document',
 			parentAsFolder: true
 		},
@@ -49,7 +50,9 @@
 					
 					var hitarea = self._buildHitarea( this, list );
 
-					var icon = self._buildIcon( this, list );
+					var icon = self._buildIcon( this, list, hitarea );
+
+					var checkbox = self._buildCheckbox( this, list, icon );
 			
 					if ( list ) {
 
@@ -80,7 +83,7 @@
 				.prependTo( anchor );
 		},
 
-		_buildIcon : function( anchor, list ) {
+		_buildIcon : function( anchor, list, hitarea ) {
 
 			var icon = this.options.icon;
 
@@ -90,11 +93,29 @@
 				icon = this.theme.folderCollapsed;
 			}
 			
-			return $('<span />')
-				.addClass( 'ui-icon ' + icon )
-				.appendTo( anchor );
+			var element = 
+				$('<span />')
+				.addClass( 'ui-icon ' + icon );
+
+			hitarea.after( element );
+
+			return element;
 		},
 
+		_buildCheckbox : function( anchor, list, icon ){
+
+			if ( !this.options.checkbox ) return false;
+
+			var element = 
+				$('<input type="checkbox" />')
+				.addClass( 'ui-helper-reset' + ' ' + this.theme.checkbox )
+				.attr('id', $( anchor ).attr('rel') );
+
+			icon.after( element );
+
+			return element;
+
+		},
 
 		_bindList : function( list, hitarea ){
 
@@ -131,6 +152,7 @@
 			$( anchor )
 			.click(function( event ){
 
+				// hitarea
 				if ( new RegExp( theme.hitarea ).test( event.target.className ) ) {
 
 					self._toggle( list, event );
@@ -138,9 +160,31 @@
 					return false;
 				}
 
-				$( this ).toggleClass( self.theme.itemselected );
+				// checkbox
+				else if ( new RegExp( theme.checkbox ).test( event.target.className ) ) {
+
+					$( this ).toggleClass( theme.itemselected, $(event.target).is(':checked') );
+
+					return;
+				}
+
+				else {
+
+					$( this ).toggleClass( tree.theme.itemselected );
+
+					if ( self.options.checkbox ) {
 				
-				self._trigger( 'click', event, this );
+						var checkbox = $( this ).find( '.' + theme.checkbox );
+				
+						if ( $( this ).hasClass( theme.itemselected ) ) {
+							checkbox.attr('checked', 'checked');
+						} else {
+							checkbox.removeAttr('checked');
+						}
+					}
+					
+					tree._trigger( 'click', event, this );
+				}
 
 				return false;
 			})
@@ -153,7 +197,10 @@
 
 					$( this ).removeClass( 'ui-state-hover' );
 				}
-			);
+			)
+			.bind('toggle', function( event, tree ){
+
+			});
 		},
 
 		_open : function( list, event ){
@@ -265,6 +312,7 @@
 				folderCollapsed: 'ui-icon-folder-collapsed',
 				folderOpen: 'ui-icon-folder-open',
 				itemselected: 'ui-tree-item-active',
+				checkbox: 'ui-tree-checkbox',
 				icons: {
 					'listopen': 'ui-icon-triangle-1-s',
 					'listclosed': 'ui-icon-triangle-1-e'
@@ -276,6 +324,7 @@
 				folderCollapsed: 'ui-icon-folder-collapsed',
 				folderOpen: 'ui-icon-folder-open',
 				itemselected: 'ui-tree-item-active',
+				checkbox: 'ui-tree-checkbox',
 				icons: {
 					'listopen': 'ui-icon-minus',
 					'listclosed': 'ui-icon-plus'

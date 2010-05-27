@@ -29,3 +29,7 @@
 	background-image: url(../img/ajax_loader.gif) !important;
 	background-position: center center !important;
 }
+.ui-tree-checkbox {
+	float: left;
+	margin: .2em .4em 0 .2em;
+}
