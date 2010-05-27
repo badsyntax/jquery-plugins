@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery UI Scrollbar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.ui.scrollbar.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.scrollbar.js"></script>
+	<style type="text/css">
+		#scrollbar {
+			width: 400px;
+			height: 300px;
+			margin-bottom: 2em;
+		}
+	</style>
+</head>
+<body>
+	<div>
+
+		<h2>Scroll bar</h2>
+
+		<div id="scrollbar" class="ui-widget ui-widget-content ui-corner ui-corner-all">
+
+
+		</div>
+
+		<button id="create">
+			Create scrollbar
+		</button>
+		<button id="destroy">
+			Destroy scrollbar
+		</button>
+
+		<script type="text/javascript" src="/js/themeswitchertool.js"></script>
+		<div id="theme-switcher"></div>
+	</div>
+
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+
+			$('#scrollbar').scrollbar();
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+
+			$('#scrollbar').scrollbar('destroy');
+		});
+
+		$('#theme-switcher').themeswitcher();
+	</script>
+</body>
+</html>

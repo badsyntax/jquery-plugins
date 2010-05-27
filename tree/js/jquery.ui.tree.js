@@ -208,7 +208,6 @@
 
 			list = $( list );
 
-
 			var self = this, theme = this.theme, hitarea = list.data('hitarea');
 
 			function open( hitarea ){
@@ -249,9 +248,11 @@
 
 			list = $( list );
 
-			list.data('hitarea').removeClass( this.theme.icons.listopen ).addClass( this.theme.icons.listclosed );
-
-			list.slideUp( this.options.animateSpeed );
+			list
+				.slideUp( this.options.animateSpeed )
+				.data('hitarea')
+					.removeClass( this.theme.icons.listopen )
+					.addClass( this.theme.icons.listclosed );
 
 			this._trigger('close', event, { list: list });
 		},
@@ -262,14 +263,7 @@
 
 			if ( list.length ){
 
-				if ( list.is(':visible') ){
-
-					this._close( list, event );
-						
-				} else {
-					
-					this._open( list, event );
-				}
+				list.is(':visible') ? this._close( list, event ) : this._open( list, event );
 			}
 		},
 
