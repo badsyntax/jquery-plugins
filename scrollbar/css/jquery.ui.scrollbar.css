@@ -20,18 +20,26 @@
 	top: 0;
 	right: 1px;
 }
-.ui-scrollbar-arrow-up {
+.ui-scrollbar-container .ui-scrollbar-arrow-up {
 	cursor: pointer;
 	position: absolute;
-	right: 3px;
-	top: 3px;
+	right: 2px;
+	top: 2px;
+	background: transparent !important;
+	border-color: transparent !important;
 }
-.ui-scrollbar-arrow-down {
+.ui-scrollbar-container .ui-scrollbar-arrow-down {
 	cursor: pointer;
 	position: absolute;
-	right: 3px;
-	bottom: 3px;
+	right: 2px;
+	bottom: 2px;
+	background: transparent !important;
+	border-color: transparent;
 }
 .ui-scrollbar-state-hover {
 	background: #eee;
+}
+
+.ui-scrollbar-container .ui-scrollbar-arrow-state-active {
+
 }

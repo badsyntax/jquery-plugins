@@ -43,39 +43,54 @@
 					.addClass( 'ui-scrollbar-face ui-state-default ui-widget-content ui-corner-all' )
 					.height( 100 )
 				,
+				arrowUpContainer: $('<div />')
+					.addClass( 'ui-scrollbar-arrow-up ui-state-default ui-corner-all' )
+					.appendTo( this.element )
+				,
 				arrowUp: $('<div />')
-					.addClass( 'ui-scrollbar-arrow-up ui-icon ui-icon-triangle-1-n' )
+					.addClass( 'ui-icon ui-icon-triangle-1-n')
+				,
+				arrowDownContainer: $('<div />')
+					.addClass( 'ui-scrollbar-arrow-down ui-state-default ui-corner-all' )
 					.appendTo( this.element )
 				,
 				arrowDown: $('<div />')
-					.addClass( 'ui-scrollbar-arrow-down ui-icon ui-icon-triangle-1-s' )
-					.appendTo( this.element )
+					.addClass( 'ui-icon ui-icon-triangle-1-s' )
 			};
 
 			this.elements.base.appendTo( this.elements.baseContainer );
 
 			this.elements.face.appendTo( this.elements.base );
+
+			this.elements.arrowUp.appendTo( this.elements.arrowUpContainer );
+			
+			this.elements.arrowDown.appendTo( this.elements.arrowDownContainer );
 		},
 
 		_bind : function(){
 
 			function hover( event ){
 
-				$( this ).toggleClass( 'ui-scrollbar-state-hover' );
+				$( this ).toggleClass( 'ui-state-hover ui-scrollbar-state-hover' );
 			}
 
-			this.elements.arrowUp.bind('mouseenter mouseleave', hover );
+			function focus( event ){
+
+				$( this ).toggleClass( 'ui-state-active ui-scrollbar-arrow-state-active' );
+			}
+
+			this.elements.arrowUpContainer.bind('mouseenter mouseleave mousedown mouseup', hover );
 			
-			this.elements.arrowDown.bind('mouseenter mouseleave', hover );
+			this.elements.arrowDownContainer.bind('mouseenter mouseleave mousedown mouseup', hover );
 
 			this.elements.face
 			.bind('mouseenter mouseleave', function(){
 
-				$(this).toggleClass('ui-state-hover');
+				$(this).toggleClass( 'ui-state-hover' );
 			})
 			.bind('focus blur', function(){
 			
-				$(this).toggleClass('ui-state-active');
+				$(this).toggleClass( 'ui-state-active' );
 			})
 			.draggable({ 
 				axis: 'y',
