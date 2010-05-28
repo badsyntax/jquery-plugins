@@ -6,6 +6,7 @@
  * @Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
+ *	jquery.ui.draggable.js
  *
  */
 
@@ -31,9 +32,11 @@
 		_build : function(){
 
 			this.elements = {
+				contentContainer: $('<div />')
+					.addClass( 'ui-scrollbar-content-container' )
+				,
 				baseContainer: $('<div />')
 					.addClass( 'ui-scrollbar-base-container ui-widget-content ui-corner-all' )
-					.appendTo( this.element )
 				,
 				base: $('<div />')
 					.addClass( 'ui-scrollbar-base' )
@@ -44,18 +47,24 @@
 				,
 				arrowUpContainer: $('<div />')
 					.addClass( 'ui-scrollbar-arrow-up ui-state-default ui-corner-all' )
-					.appendTo( this.element )
 				,
 				arrowUp: $('<div />')
 					.addClass( 'ui-icon ui-icon-triangle-1-n')
 				,
 				arrowDownContainer: $('<div />')
 					.addClass( 'ui-scrollbar-arrow-down ui-state-default ui-corner-all' )
-					.appendTo( this.element )
 				,
 				arrowDown: $('<div />')
 					.addClass( 'ui-icon ui-icon-triangle-1-s' )
 			};
+
+			this.elements.contentContainer.append( this.element.contents() ).prependTo( this.element );
+			
+			this.elements.baseContainer.appendTo( this.element );
+			
+			this.elements.arrowUpContainer.appendTo( this.element );
+
+			this.elements.arrowDownContainer.appendTo( this.element );
 
 			this.elements.base.appendTo( this.elements.baseContainer );
 
@@ -86,12 +95,12 @@
 
 			function hover( event ){
 
+				if (event.type == 'mousedown' && event.target === self.elements.arrowDown[0] ) {
+
+					self._scroll( event, false, -1 );
+				}
+
 				$( this ).toggleClass( 'ui-state-hover ui-scrollbar-state-hover' );
-			}
-
-			function focus( event ){
-
-				$( this ).toggleClass( 'ui-state-active ui-scrollbar-arrow-state-active' );
 			}
 
 			this.elements.arrowUpContainer.bind('mouseenter mouseleave mousedown mouseup', hover );
@@ -116,13 +125,20 @@
 			});
 
 			this.element.bind('drag', function(event, ui) {
-				self._scroll(event, ui);
+				self._scroll(event, -ui.position.top);
 			});
 		},
 
-		_scroll: function( event, ui ){
+		_scroll: function( event, val, amount ){
 
-			this.element.scrollTop( ui.position.top );
+			if ( !val ) {
+
+				var marginTop = parseInt( this.elements.contentContainer.css('marginTop').replace(/px$/, '') );
+
+				val = marginTop + amount;
+			}
+
+			this.elements.contentContainer.css({ marginTop:  val + 'px' });
 		},
 
 		destroy : function(){
