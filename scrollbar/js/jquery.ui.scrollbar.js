@@ -24,6 +24,8 @@
 			this._build();
 
 			this._bind();
+
+			this._resize();
 		},
 
 		_build : function(){
@@ -31,17 +33,14 @@
 			this.elements = {
 				baseContainer: $('<div />')
 					.addClass( 'ui-scrollbar-base-container ui-widget-content ui-corner-all' )
-					.height( this.element.height() - 4 )
 					.appendTo( this.element )
 				,
 				base: $('<div />')
 					.addClass( 'ui-scrollbar-base' )
-					.height( this.element.height() - 40 )
 				,
 				face: $('<a />')
 					.attr('href', '#')
 					.addClass( 'ui-scrollbar-face ui-state-default ui-widget-content ui-corner-all' )
-					.height( 100 )
 				,
 				arrowUpContainer: $('<div />')
 					.addClass( 'ui-scrollbar-arrow-up ui-state-default ui-corner-all' )
@@ -67,7 +66,23 @@
 			this.elements.arrowDown.appendTo( this.elements.arrowDownContainer );
 		},
 
+		_resize : function(){
+			
+			
+			this.elements.baseContainer.height( this.element.height() - 4 );
+
+			this.elements.base.height( this.element.height() - 40 );
+
+			var ratio = Math.round( ( this.element.height() / this.element[0].scrollHeight ) * 100 );
+
+			var height = ( this.elements.base.height() / 100 ) * ratio;
+
+			this.elements.face.height( height );
+		},
+
 		_bind : function(){
+
+			var self = this;
 
 			function hover( event ){
 
@@ -92,10 +107,22 @@
 			
 				$(this).toggleClass( 'ui-state-active' );
 			})
+			.click(function(){
+				return false;
+			})
 			.draggable({ 
 				axis: 'y',
 				containment: 'parent'
 			});
+
+			this.element.bind('drag', function(event, ui) {
+				self._scroll(event, ui);
+			});
+		},
+
+		_scroll: function( event, ui ){
+
+			this.element.scrollTop( ui.position.top );
 		},
 
 		destroy : function(){
