@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery UI Ellipsis</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.ui.ellipsis.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.ellipsis.js"></script>
+	<style type="text/css">
+		#ellipsis { width: 400px }
+	</style>
+</head>
+<body>
+	<div>
+
+		<h2>Ellipsis</h2>
+
+		<div id="ellipsis">
+			<p>Vestibulum vulputate orci a arcu pretium facilisis ut a tellus. Donec sapien metus, tristique nec ultrices commodo, mattis non metus. Sed et nulla nec est mattis dictum ut eget lacus. Suspendisse ac tortor in nisl aliquam tristique quis in diam. Ut sit amet lacinia lorem. Nulla facilisi. Donec porta sem elementum nulla lobortis eu congue quam ultricies.</p>
+		</div>
+
+		<button id="destroy">
+			Destroy ellipsis
+		</button>
+		<button id="create">
+			Create Ellipsis
+		</button>
+
+		<script type="text/javascript" src="/js/themeswitchertool.js"></script>
+		<div id="theme-switcher"></div>
+	</div>
+
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+		
+			$('#ellipsis p').ellipsis();
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+			
+			$('#ellipsis p').ellipsis('destroy');
+		});
+
+		$('#theme-switcher').themeswitcher();
+	</script>
+</body>
+</html>
