@@ -80,50 +80,7 @@
 				this.elements.bars.vertical.arrowDown.appendTo( this.elements.bars.vertical.arrowDownContainer );
 			}
 
-			if ( this.element.width() < this.element[0].scrollWidth ) {
-
-				this.elements.bars.horizontal = {
-
-					baseContainer: $('<div />')
-						.addClass( 'ui-widget-content ui-corner-all ui-scrollbar-base-container' )
-						.appendTo( this.element )
-					,
-					base: $('<div />')
-						.addClass( 'ui-scrollbar-base' )
-					,
-					face: $('<a />')
-						.attr('href', '#')
-						.addClass( 'ui-state-default ui-widget-content ui-corner-all ui-scrollbar-face' )
-					,
-					arrowUpContainer: $('<div />')
-						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-up' )
-						.appendTo( this.element )
-					,
-					arrowUp: $('<div />')
-						.addClass( 'ui-icon ui-icon-triangle-1-n')
-					,
-					arrowDownContainer: $('<div />')
-						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-down' )
-						.appendTo( this.element )
-					,
-					arrowDown: $('<div />')
-						.addClass( 'ui-icon ui-icon-triangle-1-s' )
-				};
-				
-				this.elements.bars.horizontal.base.appendTo( this.elements.bars.horizontal.baseContainer );
-
-				this.elements.bars.horizontal.face.appendTo( this.elements.bars.horizontal.base );
-
-				this.elements.bars.horizontal.arrowUp.appendTo( this.elements.bars.horizontal.arrowUpContainer );
-				
-				this.elements.bars.horizontal.arrowDown.appendTo( this.elements.bars.horizontal.arrowDownContainer );
-			}
-			
-
-			// need to check if scrollheight > height and scrollwidth > width
-
 			this.elements.contentContainer.append( this.element.contents() ).prependTo( this.element );
-			
 		},
 
 		_resize : function(){
@@ -155,8 +112,8 @@
 
 			function hoverClick( event ){
 
-				if (event.type == 'mousedown' ){
-					
+				if (event.type == 'mousedown' && event.which <= 1 ){
+
 					if ( event.target === self.elements.bars.vertical.arrowDown[0]) {
 
 						self._scrollDown( event );
@@ -177,11 +134,9 @@
 
 			this.elements.bars.vertical.face
 				.bind('mouseenter mouseleave', function(){
-
 					$(this).toggleClass( 'ui-state-hover' );
 				})
 				.bind('focus blur', function(){
-			
 					$(this).toggleClass( 'ui-state-active' );
 				})
 				.click(function(){
@@ -210,10 +165,13 @@
 			var marginTop = parseInt( this.elements.bars.vertical.face.css('top').replace(/px$/, '') );
 
 			val = marginTop - val;
-			
-			this.elements.bars.vertical.face.css({ 'top': val });
 
-			this._scroll( event, val );
+			if ( val >= 0 ) {
+			
+				this.elements.bars.vertical.face.css({ 'top': val });
+
+				this._scroll( event, val );
+			}
 		},
 		
 		_scrollDown: function( event, val ){
@@ -224,16 +182,22 @@
 
 			val = marginTop + val;
 
-			this.elements.bars.vertical.face.css({ 'top': val });
+			if ( val <= ( this._data.vertical.baseHeight - this._data.vertical.faceHeight ) ) {
 
-			this._scroll( event, val );
+				this.elements.bars.vertical.face.css({ 'top': val });
+
+				this._scroll( event, val );
+			}
 		},
 
 		_scroll: function( event, val, ui ){
 
-			var 
-				ratio = ( val / ( this._data.vertical.baseHeight - this._data.vertical.faceHeight ) ) * 100,
-				height = Math.round( ( ( this._data.vertical.contentContainerHeight - this._data.vertical.elementHeight ) / 100 ) * ratio ) + 2;
+			var	
+				data = this._data.vertical,
+
+				ratio = ( val / ( data.baseHeight - data.faceHeight ) ) * 100,
+
+				height = Math.round( ( ( data.contentContainerHeight - data.elementHeight ) / 100 ) * ratio );
 
 			this.elements.contentContainer.css( { marginTop:  -height + 'px' } );
 

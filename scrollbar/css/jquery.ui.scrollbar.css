@@ -30,7 +30,7 @@
 .ui-scrollbar-container .ui-scrollbar-arrow-up {
 	cursor: pointer;
 	position: absolute;
-	right: 2px;
+	right: 3px;
 	top: 2px;
 	background: transparent !important;
 	border: 0 !important;
@@ -38,7 +38,7 @@
 .ui-scrollbar-container .ui-scrollbar-arrow-down {
 	cursor: pointer;
 	position: absolute;
-	right: 2px;
+	right: 3px;
 	bottom: 2px;
 	background: transparent !important;
 	border: 0 !important;
@@ -46,8 +46,8 @@
 .ui-scrollbar-state-hover {
 	background: #eee;
 }
-.ui-scrollbar-container .ui-icon-triangle-1-s {
-	background-position: -65px -16px;
+.ui-scrollbar-container .ui-iconi {
+
 }
 
 .ui-scrollbar-container .ui-scrollbar-content-container {
