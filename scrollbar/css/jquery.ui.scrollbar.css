@@ -50,6 +50,11 @@
 	background-position: -65px -16px;
 }
 
+.ui-scrollbar-container .ui-scrollbar-content-container {
+	margin-right: 28px;
+	padding: .6em;
+}
+
 .ui-scrollbar-container .ui-scrollbar-arrow-state-active {
 
 }

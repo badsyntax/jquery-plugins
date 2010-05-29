@@ -7,6 +7,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *	jquery.ui.draggable.js
+ *	jquery.mousewheel.js
  *
  */
 
@@ -32,49 +33,97 @@
 		_build : function(){
 
 			this.elements = {
+
 				contentContainer: $('<div />')
 					.addClass( 'ui-scrollbar-content-container' )
 				,
-				baseContainer: $('<div />')
-					.addClass( 'ui-widget-content ui-corner-all ui-scrollbar-base-container' )
-				,
-				base: $('<div />')
-					.addClass( 'ui-scrollbar-base' )
-				,
-				face: $('<a />')
-					.attr('href', '#')
-					.addClass( 'ui-state-default ui-widget-content ui-corner-all ui-scrollbar-face' )
-				,
-				arrowUpContainer: $('<div />')
-					.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-up' )
-				,
-				arrowUp: $('<div />')
-					.addClass( 'ui-icon ui-icon-triangle-1-n')
-				,
-				arrowDownContainer: $('<div />')
-					.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-down' )
-				,
-				arrowDown: $('<div />')
-					.addClass( 'ui-icon ui-icon-triangle-1-s' )
+
+				bars : {}
 			};
+
+			if ( this.element.height() < this.element[0].scrollHeight ) {
+
+				this.elements.bars.vertical = {
+
+					baseContainer: $('<div />')
+						.addClass( 'ui-widget-content ui-corner-all ui-scrollbar-base-container' )
+						.appendTo( this.element )
+					,
+					base: $('<div />')
+						.addClass( 'ui-scrollbar-base' )
+					,
+					face: $('<a />')
+						.attr('href', '#')
+						.addClass( 'ui-state-default ui-widget-content ui-corner-all ui-scrollbar-face' )
+					,
+					arrowUpContainer: $('<div />')
+						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-up' )
+						.appendTo( this.element )
+					,
+					arrowUp: $('<div />')
+						.addClass( 'ui-icon ui-icon-triangle-1-n')
+					,
+					arrowDownContainer: $('<div />')
+						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-down' )
+						.appendTo( this.element )
+					,
+					arrowDown: $('<div />')
+						.addClass( 'ui-icon ui-icon-triangle-1-s' )
+				};
+				
+				this.elements.bars.vertical.base.appendTo( this.elements.bars.vertical.baseContainer );
+
+				this.elements.bars.vertical.face.appendTo( this.elements.bars.vertical.base );
+
+				this.elements.bars.vertical.arrowUp.appendTo( this.elements.bars.vertical.arrowUpContainer );
+				
+				this.elements.bars.vertical.arrowDown.appendTo( this.elements.bars.vertical.arrowDownContainer );
+			}
+
+			if ( this.element.width() < this.element[0].scrollWidth ) {
+
+				this.elements.bars.horizontal = {
+
+					baseContainer: $('<div />')
+						.addClass( 'ui-widget-content ui-corner-all ui-scrollbar-base-container' )
+						.appendTo( this.element )
+					,
+					base: $('<div />')
+						.addClass( 'ui-scrollbar-base' )
+					,
+					face: $('<a />')
+						.attr('href', '#')
+						.addClass( 'ui-state-default ui-widget-content ui-corner-all ui-scrollbar-face' )
+					,
+					arrowUpContainer: $('<div />')
+						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-up' )
+						.appendTo( this.element )
+					,
+					arrowUp: $('<div />')
+						.addClass( 'ui-icon ui-icon-triangle-1-n')
+					,
+					arrowDownContainer: $('<div />')
+						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-down' )
+						.appendTo( this.element )
+					,
+					arrowDown: $('<div />')
+						.addClass( 'ui-icon ui-icon-triangle-1-s' )
+				};
+				
+				this.elements.bars.horizontal.base.appendTo( this.elements.bars.horizontal.baseContainer );
+
+				this.elements.bars.horizontal.face.appendTo( this.elements.bars.horizontal.base );
+
+				this.elements.bars.horizontal.arrowUp.appendTo( this.elements.bars.horizontal.arrowUpContainer );
+				
+				this.elements.bars.horizontal.arrowDown.appendTo( this.elements.bars.horizontal.arrowDownContainer );
+			}
+			
 
 			// need to check if scrollheight > height and scrollwidth > width
 
 			this.elements.contentContainer.append( this.element.contents() ).prependTo( this.element );
 			
-			this.elements.baseContainer.appendTo( this.element );
-			
-			this.elements.arrowUpContainer.appendTo( this.element );
-
-			this.elements.arrowDownContainer.appendTo( this.element );
-
-			this.elements.base.appendTo( this.elements.baseContainer );
-
-			this.elements.face.appendTo( this.elements.base );
-
-			this.elements.arrowUp.appendTo( this.elements.arrowUpContainer );
-			
-			this.elements.arrowDown.appendTo( this.elements.arrowDownContainer );
 		},
 
 		_resize : function(){
@@ -82,18 +131,22 @@
 			var ratio = Math.round( ( this.element.height() / this.element[0].scrollHeight ) * 100 );
 
 			this._data = {
-				elementHeight: this.element.height(),
-				contentContainerHeight: this.elements.contentContainer.height(),
-				baseContainerHeight: this.element.height() - 4,
-				baseHeight: this.element.height() - 40,
-				faceHeight: ( ( this.element.height() - 40 ) / 100 ) * ratio 
+
+				vertical: {
+
+					elementHeight: this.element.height(),
+					contentContainerHeight: this.elements.contentContainer.height(),
+					baseContainerHeight: this.element.height() - 4,
+					baseHeight: this.element.height() - 40,
+					faceHeight: ( ( this.element.height() - 40 ) / 100 ) * ratio 
+				}
 			};
 
-			this.elements.baseContainer.height( this._data.baseContainerHeight );
+			this.elements.bars.vertical.baseContainer.height( this._data.vertical.baseContainerHeight );
 
-			this.elements.base.height( this._data.baseHeight );
+			this.elements.bars.vertical.base.height( this._data.vertical.baseHeight );
 
-			this.elements.face.height( this._data.faceHeight );
+			this.elements.bars.vertical.face.height( this._data.vertical.faceHeight );
 		},
 
 		_bind : function(){
@@ -102,74 +155,98 @@
 
 			function hoverClick( event ){
 
-				if (event.type == 'mousedown' && ( event.target === self.elements.arrowDown[0] || event.target == self.elements.arrowUp[0] ) ) {
+				if (event.type == 'mousedown' ){
+					
+					if ( event.target === self.elements.bars.vertical.arrowDown[0]) {
 
-					self._scroll( event );
+						self._scrollDown( event );
+					} else if ( event.target == self.elements.bars.vertical.arrowUp[0] ) {
+
+						self._scrollUp( event );
+					}
 				}
 
 				$( this ).toggleClass( 'ui-state-hover ui-scrollbar-state-hover' );
 			}
 
-			this.elements.arrowUpContainer
+			this.elements.bars.vertical.arrowUpContainer
 				.bind('mouseenter mouseleave mousedown mouseup', hoverClick );
 			
-			this.elements.arrowDownContainer
+			this.elements.bars.vertical.arrowDownContainer
 				.bind('mouseenter mouseleave mousedown mouseup', hoverClick );
 
-			this.elements.face
-			.bind('mouseenter mouseleave', function(){
+			this.elements.bars.vertical.face
+				.bind('mouseenter mouseleave', function(){
 
-				$(this).toggleClass( 'ui-state-hover' );
-			})
-			.bind('focus blur', function(){
+					$(this).toggleClass( 'ui-state-hover' );
+				})
+				.bind('focus blur', function(){
 			
-				$(this).toggleClass( 'ui-state-active' );
-			})
-			.click(function(){
-				return false;
-			})
-			.draggable({ 
-				axis: 'y',
-				containment: 'parent'
-			});
+					$(this).toggleClass( 'ui-state-active' );
+				})
+				.click(function(){
+					return false;
+				})
+				.draggable({ 
+					axis: 'y',
+					containment: 'parent'
+				});
 
 			this.element.bind('drag', function(event, ui) {
 
-				self._scroll(event, ui.position.top );
+				self._scroll(event, ui.position.top, ui );
 			});
+
+			 ($.fn.mousewheel) &&
+				this.element.bind('mousewheel', function(event, delta) {
+					delta > 0 ? self._scrollUp( event, 4 ) : self._scrollDown( event, 4 );
+				 });
 		},
 
-		_scroll: function( event, val ){
+		_scrollUp: function( event, val ){
 
-			var marginTop = parseInt( this.elements.contentContainer.css('marginTop').replace(/px$/, '') );
+			val = val || 2;
 
-			if ( event.target == this.elements.arrowDown[0] ) {
-				
-				val = marginTop - 2;
-				
-			}
-			if ( event.target == this.elements.arrowUp[0] ) {
-				
-				val = marginTop + 2;
-			}
+			var marginTop = parseInt( this.elements.bars.vertical.face.css('top').replace(/px$/, '') );
 
+			val = marginTop - val;
+			
+			this.elements.bars.vertical.face.css({ 'top': val });
+
+			this._scroll( event, val );
+		},
+		
+		_scrollDown: function( event, val ){
+
+			val = val || 2;
+
+			var marginTop = parseInt( this.elements.bars.vertical.face.css('top').replace(/px$/, '') );
+
+			val = marginTop + val;
+
+			this.elements.bars.vertical.face.css({ 'top': val });
+
+			this._scroll( event, val );
+		},
+
+		_scroll: function( event, val, ui ){
 
 			var 
-				ratio = ( val / ( this._data.baseHeight - this._data.faceHeight ) ) * 100,
-				height = Math.round( ( ( this._data.contentContainerHeight - this._data.elementHeight ) / 100 ) * ratio ) + 2;
-
-			this.elements.face.css( { 'top': -val } );
+				ratio = ( val / ( this._data.vertical.baseHeight - this._data.vertical.faceHeight ) ) * 100,
+				height = Math.round( ( ( this._data.vertical.contentContainerHeight - this._data.vertical.elementHeight ) / 100 ) * ratio ) + 2;
 
 			this.elements.contentContainer.css( { marginTop:  -height + 'px' } );
 
-			this._trigger( 'scroll', event );
+			this._trigger( 'scroll', event, ui );
 		},
 
 		destroy : function(){
 
 			this.element.removeClass( 'ui-scrollbar-container' );
 
-			$.each( this.elements, function(){
+			this.element.append( this.elements.contentContainer.contents() );
+
+			$.each( this.elements.bars.vertical, function(){
 			
 				$( this ).remove();
 			});
