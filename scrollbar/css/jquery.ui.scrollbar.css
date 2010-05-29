@@ -1,3 +1,10 @@
+/*
+ * jquery.ui.scrollbar.css
+ *
+ * notes: added !important declarations to support themeswitcher
+ *
+ */
+
 .ui-scrollbar-container {
 	overflow: hidden;
 	position: relative;
@@ -26,7 +33,7 @@
 	right: 2px;
 	top: 2px;
 	background: transparent !important;
-	border-color: transparent !important;
+	border: 0 !important;
 }
 .ui-scrollbar-container .ui-scrollbar-arrow-down {
 	cursor: pointer;
@@ -34,10 +41,13 @@
 	right: 2px;
 	bottom: 2px;
 	background: transparent !important;
-	border-color: transparent;
+	border: 0 !important;
 }
 .ui-scrollbar-state-hover {
 	background: #eee;
+}
+.ui-scrollbar-container .ui-icon-triangle-1-s {
+	background-position: -65px -16px;
 }
 
 .ui-scrollbar-container .ui-scrollbar-arrow-state-active {
