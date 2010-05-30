@@ -7,6 +7,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *	jquery.ui.draggable.js
+ *	jquery.ui.droppable.js
  *
  */
 
@@ -15,70 +16,64 @@
 	$.widget('ui.listsortable', {
 
 		options : {
-			helper: 'clone'
+			helper: 'clone',
+			opacity: .5
 		},
 		
 		_create : function(){
-
-			this._reposition();
 
 			this._drag();
 		},
 
 		_reposition : function(){
 
-			var self = this;
-
-			this.items = {};
-
-			this.element.find( 'li' ).each(function(){
-			
-				var position = $( this )
-					.css( { 'top': 'auto' } )
-					.draggable('destroy')
-					.position();
-
-				self.items[ position.top ] = {
-					element: $( this ),
-					height: $( this ).height()
-				};
-			});
+			this.element.find( 'li' ).css( { 
+				'top': 'auto',
+				left: 'auto'
+			} )
 		},
 
 		_drag : function(){
 			
-			var self = this, items = this.items;
+			var self = this;
 
-			this.element.find( 'li' ).draggable({
-				axis: 'y',
+			this.element.find( 'li' )
+			.draggable({
 				containment: this.element,
-				opacity: .5,
+				opacity: this.options.opacity,
+				axis: 'y',
+				zIndex: 9999,
+				//revert: 'valid',
 				drag: function(event, ui){
-					
-					var position = ui.helper.position(), height = ui.helper.height(), bottom = position.top + height;
 
-					$.each(items, function( top ){
-
-						top = parseInt( top );
-						
-						if ( this.element[0] == event.target ) return true;
-
-						if ( 
-							( bottom > top + ( this.element.height() / 2 ) )  && 
-							( bottom < ( top + this.element.height() ) )
-						) {
-
-							console.log('drop');
-						}
-					});
 				},
 				stop: function( event, ui ) {
-
 					self._reposition();
+				}
+			}).droppable({
+				hoverClass: 'ui-state-active',
+				drop: function(event, ui) {
 
-					self._drag();
+					var dropped = $( this ).find( '.ui-state-active' );
+					
+					if ( !dropped.length ) {
+
+						$(this).after( ui.helper );
+					} else {
+
+						dropped.each(function( i ){
+
+							$( this ).removeClass( 'ui-state-active');
+
+							if ( i === dropped.length - 1 ) {
+						
+								$(this).after( ui.helper );
+							}
+						});
+					}
 				}
 			});
+
 		},
 
 		destroy : function(){
