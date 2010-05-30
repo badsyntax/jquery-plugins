@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery UI List sortable</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.ui.listsortable.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.listsortable.js"></script>
+	<style type="text/css">
+		li {
+			padding: .5em;
+		}
+	</style>
+</head>
+<body>
+	<div>
+
+		<h2>Tree</h2>
+
+		<ul class="tree">
+			<li><a href="#">Item 1</a></li>
+			<li>
+				<a href="#">Item 2</a>
+			</li>
+		</ul>
+
+		<br />
+
+		<h2>Create / Destroy</h2>
+		
+		<button id="create">
+			Create sortable
+		</button>
+		<button id="destroy">
+			Destroy sortable
+		</button>
+
+	</div>
+	
+	<script type="text/javascript" src="/js/themeswitchertool.js"></script>
+	<div id="theme-switcher"></div>
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+
+			$('.tree').listsortable({
+			});
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+
+			$('.tree').listsortable('destroy');
+
+		});
+	
+		$('#theme-switcher').themeswitcher();
+	</script>
+</body>
+</html>
