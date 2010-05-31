@@ -21,9 +21,15 @@
 			});
 		}
 
-		function replace(key){
+		function replaceText( val ){
 
-			this.nodeValue = this.nodeValue.replace( new RegExp('\\$\{' + key + '\}', 'g'), data[key] );
+			this.nodeValue = val;
+		}
+
+		function replaceHTML( val ){
+
+				
+			$( this ).after( val ).remove(); 
 		}
 
 		return this.each(function(){
@@ -34,7 +40,16 @@
 
 				while( match = /\{(.*?)\}/g.exec( nodeValue ) ) {
 
-					( data[match[1]] ) && replace.call( this, match[1] );
+					if ( data[match[1]] ) { 
+
+						var 
+					
+						func = /<[^>]+>/.test( data[match[1]] ) ? replaceHTML : replaceText,
+
+						val = this.nodeValue.replace( new RegExp('\\$\{' + match[1] + '\}', 'g'), data[match[1]] );
+
+						func.call( this, val );
+					}
 				}
 			});
 		});
