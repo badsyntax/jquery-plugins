@@ -41,13 +41,12 @@
 				bars : {}
 			};
 
-			if ( this.element.height() < this.element[0].scrollHeight ) {
+			if ( true || his.element.height() < this.element[0].scrollHeight ) {
 
 				this.elements.bars.vertical = {
 
 					baseContainer: $('<div />')
 						.addClass( 'ui-widget-content ui-corner-all ui-scrollbar-base-container' )
-						.appendTo( this.element )
 					,
 					base: $('<div />')
 						.addClass( 'ui-scrollbar-base' )
@@ -58,14 +57,12 @@
 					,
 					arrowUpContainer: $('<div />')
 						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-up' )
-						.appendTo( this.element )
 					,
 					arrowUp: $('<div />')
 						.addClass( 'ui-icon ui-icon-triangle-1-n')
 					,
 					arrowDownContainer: $('<div />')
 						.addClass( 'ui-state-default ui-corner-all ui-scrollbar-arrow-down' )
-						.appendTo( this.element )
 					,
 					arrowDown: $('<div />')
 						.addClass( 'ui-icon ui-icon-triangle-1-s' )
@@ -80,7 +77,12 @@
 				this.elements.bars.vertical.arrowDown.appendTo( this.elements.bars.vertical.arrowDownContainer );
 			}
 
-			this.elements.contentContainer.append( this.element.contents() ).prependTo( this.element );
+			this.elements.contentContainer
+				.append( this.element.contents() )
+				.prependTo( this.element )
+				.after( this.elements.bars.vertical.baseContainer )
+				.after( this.elements.bars.vertical.arrowUpContainer )
+				.after( this.elements.bars.vertical.arrowDownContainer );
 		},
 
 		_resize : function(){

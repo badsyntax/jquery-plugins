@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.ui.tree.css" />
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../listsortable/js/jquery.ui.listsortable.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.tree.js"></script>
 </head>
 <body>
@@ -79,7 +80,7 @@
 
 			$('.tree').tree({
 				theme: 'default',
-				checkbox: true,
+				checkbox: false,
 				icons: true,
 				nodeDataURL: 'get-child-list.php'
 			});

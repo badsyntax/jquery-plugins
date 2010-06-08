@@ -107,7 +107,7 @@
 
 				var offset = self.elements.hitarea.offset(), width = self.options.width;
 
-				if ( width = 'inherit' ) {
+				if ( width == 'inherit' ) {
 
 					self.elements.menulist.width( 'auto ');
 

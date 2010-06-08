@@ -11,7 +11,13 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.listsortable.js"></script>
 	<style type="text/css">
+		ul {
+
+		}
 		li {
+		}
+		li a {
+			display: block;
 			padding: .5em;
 		}
 	</style>
@@ -19,29 +25,31 @@
 <body>
 	<div>
 
-		<h2>Tree</h2>
+		<h2>Sortable List</h2>
 
-		<ul class="tree">
-			<li><a href="#">Item 1</a></li>
-			<li>
-				<a href="#">Item 2</a>
-				<ul>
-					<li><a href="#">Item 1</a></li>
-					<li><a href="#">Item 2</a></li>
-					<li><a href="#">Item 3</a></li>
-					<li><a href="#">Item 4</a></li>
-					<li><a href="#">Item 5</a></li>
-					<li>
-						<a href="#">Item 2</a>
-						<ul>
-							<li><a href="#">Item 3</a></li>
-							<li><a href="#">Item 4</a></li>
-							<li><a href="#">Item 5</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-		</ul>
+		<div class="ui-widget-content ui-corner-all" style="width: 300px">
+			<ul class="tree">
+				<li><a href="#">Item 1</a></li>
+				<li>
+					<a href="#">Item 2</a>
+					<ul>
+						<li><a href="#">Item 1</a></li>
+						<li><a href="#">Item 2</a></li>
+						<li><a href="#">Item 3</a></li>
+						<li><a href="#">Item 4</a></li>
+						<li><a href="#">Item 5</a></li>
+						<li>
+							<a href="#">Item 2</a>
+							<ul>
+								<li><a href="#">Item 3</a></li>
+								<li><a href="#">Item 4</a></li>
+								<li><a href="#">Item 5</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 
 		<br />
 
@@ -52,16 +60,16 @@
 		</button>
 		<button id="destroy">
 			Destroy sortable
-		</button>
+	</button>
 
-	</div>
-	
-	<script type="text/javascript" src="/js/themeswitchertool.js"></script>
-	<div id="theme-switcher"></div>
-	
-	<script type="text/javascript">
+</div>
 
-		$('#create').click(function(){
+<script type="text/javascript" src="/js/themeswitchertool.js"></script>
+<div id="theme-switcher"></div>
+
+<script type="text/javascript">
+
+	$('#create').click(function(){
 
 			$('.tree').listsortable({
 			});

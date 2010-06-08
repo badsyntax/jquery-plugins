@@ -14,7 +14,8 @@
 	<div id="renderme">
 
 		<p>
-			This tiny ${thing} walks the ${what} of a given DOM tree, replacing placeholder variables with data.
+			This tiny ${thing} walks the ${what} of a given DOM tree, replacing placeholder variables within textnodes 
+			and <a href="${url}">tag attributes</a>.
 		</p>
 	</div>
 
@@ -26,7 +27,8 @@
 
 		var data = {
 			thing: 'plugin',
-			what: 'textnodes'
+			what: 'textnodes',
+			url: 'youdoesit.html'
 		};
 
 		$('#render').click(function(){

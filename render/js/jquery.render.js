@@ -12,7 +12,7 @@
 		data = data || {};
 
 		options = $.extend({
-			attrs: 'href,class,src,style'.split(',')
+			attrs: 'href,class,src'
 		}, options);
 
 		function walkTextNodes(textNodeCallback, elementNodeCallback){
@@ -68,20 +68,17 @@
 
 				var el = this;
 
-				$.each(options.attrs, function(){
+				$.each(options.attrs.split(','), function(){
 
 					var attr = el[this];
 
-					if ( attr ) {
+					if ( attr && typeof attr == 'string' ){
 
-						if ( typeof attr == 'string' ){
+						var text = document.createTextNode( attr );	
 
-							var text = document.createTextNode( attr );	
+						replace.call( text, unescape(attr) );
 
-							replace.call( text, unescape(attr) );
-
-							el[this] = text.nodeValue;
-						}
+						el[this] = text.nodeValue;
 					}
 				});
 			});

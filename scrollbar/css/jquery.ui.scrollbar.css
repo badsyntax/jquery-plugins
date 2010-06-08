@@ -27,6 +27,9 @@
 	top: 0;
 	right: 1px;
 }
+.ui-scrollbar-face .ui-icon {
+	margin-top: 50%;
+}
 .ui-scrollbar-container .ui-scrollbar-arrow-up {
 	cursor: pointer;
 	position: absolute;
@@ -34,6 +37,7 @@
 	top: 2px;
 	background: transparent !important;
 	border: 0 !important;
+	z-index: 10;
 }
 .ui-scrollbar-container .ui-scrollbar-arrow-down {
 	cursor: pointer;
@@ -42,6 +46,7 @@
 	bottom: 2px;
 	background: transparent !important;
 	border: 0 !important;
+	z-index: 10;
 }
 .ui-scrollbar-state-hover {
 	background: #eee;
@@ -53,6 +58,7 @@
 .ui-scrollbar-container .ui-scrollbar-content-container {
 	margin-right: 28px;
 	padding: .6em;
+	overflow: hidden;
 }
 
 .ui-scrollbar-container .ui-scrollbar-arrow-state-active {

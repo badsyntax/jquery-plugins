@@ -17,7 +17,7 @@
 			width: 320,
 			theme: 'default',
 			nodeDataURL: '',
-			sortable: false,
+			sortable: true,
 			animateSpeed: 300,
 			checkbox: false,
 			icons: true,
@@ -106,7 +106,7 @@
 
 		_buildCheckbox : function( anchor, list, hitarea, icon ){
 
-			if ( !this.options.checkbox ) return false;
+			if ( !this.options.checkbox ) return;
 
 			var element = 
 				$('<input type="checkbox" />')
@@ -139,12 +139,9 @@
 				self._close( this, event );
 			});
 			
-			if ( this.options.sortable && $.isFunction( $.fn.sortable ) ) {
+			if ( this.options.sortable && $.isFunction( $.fn.listsortable ) ) {
 
-				$([ this.element, this.element.find('ul') ]).sortable({
-					placeholder: 'ui-state-highlight ui-tree-placeholder',
-					connectWith: self.element.find('ul').not( this )
-				}).disableSelection();
+				$([ this.element ]).listsortable().disableSelection();
 			}
 		},
 

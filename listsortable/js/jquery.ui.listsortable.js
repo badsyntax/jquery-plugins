@@ -27,7 +27,7 @@
 
 		_reposition : function(){
 
-			this.element.find( 'li' ).css( { 
+			this.element.find( 'a' ).css( { 
 				'top': 'auto',
 				left: 'auto'
 			} )
@@ -37,11 +37,12 @@
 			
 			var self = this;
 
-			this.element.find( 'li' )
+			this.element.find( 'a' )
 			.draggable({
 				containment: this.element,
 				opacity: this.options.opacity,
-				axis: 'y',
+				axis: 'x,y',
+				helper: 'clone',
 				zIndex: 9999,
 				//revert: 'valid',
 				drag: function(event, ui){
@@ -58,7 +59,7 @@
 					
 					if ( !dropped.length ) {
 
-						$(this).after( ui.helper );
+						$(this).parent().after( ui.helper.parent() );
 					} else {
 
 						dropped.each(function( i ){
