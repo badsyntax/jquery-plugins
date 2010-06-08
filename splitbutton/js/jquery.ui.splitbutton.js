@@ -15,7 +15,10 @@
 	$.widget('ui.splitbutton', {
 		
 		options: {
-			width: 'auto'
+			width: 'auto',
+			split: true,
+			menuPosition: 'right',
+			menuStack: 'bottom'
 		},
 		
 		_create : function(){
@@ -23,26 +26,28 @@
 			var self = this;
 
 			this.elements = {
-				button: this.element.find( 'button:eq(0)' ).button(),
-				hitarea: this.element.find( 'button:eq(1)' ).button({
-					text: false,
-					icons: {
-						primary: 'ui-icon-triangle-1-s'
-					}
-				}),
-				menulist: $('<ul />').appendTo('body')
+				button: this.element.find( 'button:eq(0)' ).addClass('ui-button-text-icon').button(),
+				hitarea: !this.options.split ? 
+					this.element.find( 'button:eq(0)' ) : 
+					this.element.find( 'button:eq(1)' ).button({
+						text: false,
+						icons: {
+							primary: 'ui-icon-triangle-1-s'
+						}
+					}).addClass('sledge-button'),
+				menu: $('<ul />').appendTo('body')
 			};
-			
+
 			this.element
-				.addClass( 'ui-splitbutton' )
+				.addClass( this.widgetBaseClass )
 				.buttonset();
 			
 			this.elements.hitarea
 				.attr('role', 'hitarea')
-				.addClass('ui-splitbutton-hitarea');
+				.addClass( this.widgetBaseClass + '-hitarea');
 
-			this.elements.menulist
-				.addClass('ui-splitbutton-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset')
+			this.elements.menu
+				.addClass( this.widgetBaseClass + '-menu ui-widget ui-widget-content ui-corner-all ui-helper-reset')
 				.attr('role', 'listbox');
 
 			this._build();
@@ -54,45 +59,63 @@
 
 			var self = this
 
+			if ( !this.options.items) return;
+
 			$.each(this.options.items, function(label){
 
-				var callback = this;
-
-				var anchor = $( '<a />' , {
-					href: '#',
-					mousedown: function(event){
-
-						callback.apply( this, arguments );
-
-						self.elements.hitarea.blur();
-
-						self._trigger('select', event);
-					}
-				}).hover(
-					function(){
-						$(this).addClass('ui-state-hover');
-					},
-					function(){
-						$(this).removeClass('ui-state-hover');
-					}
-				).addClass('ui-corner-all').html( label );
-
-				$( '<li />' )
-					.attr('role', 'menuitem')
-					.append( anchor )
-					.addClass( 'ui-helper-reset' )
-					.appendTo( self.elements.menulist );
+				self._addItem( label, {}, this, self.options.menuStack );
 
 			});
+		},
+
+		_addItem: function( label, data, callback, menustack ) {
+
+			var self = this, 
+
+			anchor = 
+				$( '<a />')
+				.attr('href', '#')
+				.bind('itemclick', function(event){
+	
+					self.elements.hitarea.removeClass('ui-state-hover').blur();
+					
+					self.elements.button.removeClass('ui-state-hover').blur();
+					
+					( callback ) && callback.apply( this, [ event, data ] );
+	
+					self._trigger('itemclick', event);
+				})
+				.mousedown(function(){
+	
+					$(this).trigger('itemclick');
+				})
+				.bind('mouseenter mouseleave', function(){
+	
+					$(this).toggleClass('ui-state-hover');
+				})
+				.addClass('ui-corner-all')
+				.html( label );
+
+			$( '<li />' )
+				.attr('role', 'menuitem')
+				.append( anchor )
+				.addClass( 'ui-helper-reset' )
+				[ menustack == 'bottom' ? 'appendTo' : 'prependTo' ]( this.elements.menu );
 		},
 		
 		_bind : function(){
 
 			var self = this;
+
+			this.elements.button
+			.bind('click', function(event){
+				
+				self._trigger('buttonclick', event);
+			});
 			
 			this.elements.hitarea
 			.bind( 'click', function(){
-			
+
 				$(this).focus();
 				
 				self.open()
@@ -102,25 +125,30 @@
 				self.close();
 			});
 
-			this.elements.menulist
+			this.elements.menu
 			.bind('show', function(){
 
-				var offset = self.elements.hitarea.offset(), width = self.options.width;
+				var hitarea = self.elements.hitarea, menu = self.elements.menu, 
+					offset = hitarea.offset(), width = self.options.width, position = self.options.menuPosition;
 
 				if ( width == 'inherit' ) {
 
-					self.elements.menulist.width( 'auto ');
+					menu.width( 'auto ');
 
-					var padding = ( self.elements.menulist.outerWidth() - self.elements.menulist.width() ) / 2;
+					var padding = ( menu.outerWidth() - menu.width() ) / 2;
 
 					width = self.element.width() - padding;
 				}
 
-				self.elements.menulist
+				var left = ( position == 'right' ) ?
+						self.elements.button.offset().left : 
+						( offset.left + hitarea.outerWidth() ) - menu.outerWidth();
+
+				menu
 				.width( width )
 				.css({
-					left: ( offset.left - self.elements.menulist.outerWidth() ) + self.elements.hitarea.width(),
-					top: offset.top + self.elements.hitarea.outerHeight(),
+					left: left,
+					top: offset.top + hitarea.outerHeight(),
 				});
 			})
 			.bind('hide', function(){
@@ -131,27 +159,38 @@
 		
 		open : function(){
 			
-			this.elements.menulist.trigger('show');
+			this.elements.menu.trigger('show');
 
 			this._trigger('open');
 		},
 
 		close : function(){
 			
-			this.elements.menulist.trigger('hide');
+			this.elements.menu.trigger('hide');
 
 			this._trigger('close');
 		},
 
+		add : function(label, data, callback, menuStack){
+
+			this._addItem( label, data, callback, menuStack || this.options.menuStack );
+
+			return this;
+		},
+
+		items: function(){
+			
+			return this.elements.menu.children();
+		},
+
 		destroy : function(){
 
-			this.elements.menulist.remove();
+			this.elements.menu.remove();
 
 			this.element.buttonset('destroy');
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
 	});
-
 
 })(jQuery);
