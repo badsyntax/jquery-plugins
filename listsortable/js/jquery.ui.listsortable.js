@@ -17,24 +17,12 @@
 
 		options : {
 			helper: 'clone',
-			opacity: .5
+			opacity: .5,
+			parentChildDrop: false
 		},
 		
 		_create : function(){
 
-			this._drag();
-		},
-
-		_reposition : function(){
-
-			this.element.find( 'a' ).css( { 
-				'top': 'auto',
-				left: 'auto'
-			} )
-		},
-
-		_drag : function(){
-			
 			var self = this;
 
 			this.element.find( 'a' )
@@ -44,27 +32,45 @@
 				axis: 'x,y',
 				helper: 'clone',
 				zIndex: 9999,
-				//revert: 'valid',
 				drag: function(event, ui){
 
 				},
 				stop: function( event, ui ) {
-					self._reposition();
-				}
-			}).droppable({
-				hoverClass: 'ui-state-active',
-				drop: function(event, ui) {
 
-					var dropped = $( this ).find( '.ui-state-active' );
+					self._refresh();
+				}
+			})
+			.droppable({
+				accept: function(dragger){
+
+					return self.options.parentChildDrop ? 1 : !dragger.parents('li:first').has(this).length;
+				},
+				hoverClass: this.widgetBaseClass + '-droppable-hover',
+				drop: function(event, ui){
+					
+					if ( ui.helper.parents('li:first').has(this).length ){
+
+						var list = $( this ).parents('ul:first');
+
+						ui.helper.after( list.children() );
+
+						list.remove();
+
+						//$( this ).after( ui.helper );
+
+						return;
+					}
+
+					var dropped = $( this ).find( this.widgetBaseClass + '-active' );
 					
 					if ( !dropped.length ) {
 
-						$(this).parent().after( ui.helper.parent() );
+						$(this).parents('li:first').after( ui.helper.parents('li:first') );
 					} else {
 
 						dropped.each(function( i ){
 
-							$( this ).removeClass( 'ui-state-active');
+							$( this ).removeClass( this.widgetBaseClass + '-active');
 
 							if ( i === dropped.length - 1 ) {
 						
@@ -77,7 +83,20 @@
 
 		},
 
+		_refresh : function(){
+
+			this.element.find( 'a' ).css({ 
+				'top': 'auto',
+				left: 'auto'
+			});
+		},
+
 		destroy : function(){
+
+			this.element.find('a')
+				.removeClass(this.widgetBaseClass + '-active')
+				.draggable('destroy')
+				.droppable('destroy');
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
