@@ -1,3 +1,7 @@
 .ui-listsortable-droppable-hover {
-	border-bottom: 2px solid red;
+
+}
+
+.ui-listsortable-icon-dropbelow {
+	position: absolute;
 }

@@ -25,6 +25,12 @@
 
 			var self = this;
 
+			this.elements = {
+				dropBelow: $('<span />')
+						.addClass( this.widgetBaseClass + '-icon-dropbelow ui-icon ui-icon-arrowthick-1-e ui-helper-hidden-accessible' )
+						.appendTo( 'body' )
+			};
+
 			this.element.find( 'a' )
 			.draggable({
 				containment: this.element,
@@ -41,49 +47,70 @@
 				}
 			})
 			.droppable({
-				accept: function(dragger){
-
-					return self.options.parentChildDrop ? 1 : !dragger.parents('li:first').has(this).length;
-				},
 				hoverClass: this.widgetBaseClass + '-droppable-hover',
 				drop: function(event, ui){
-					
-					if ( ui.helper.parents('li:first').has(this).length ){
 
-						var list = $( this ).parents('ul:first');
+					self._drop(this, event, ui);
+				},
+				accept: function(dragger){
 
-						ui.helper.after( list.children() );
+					return self._accept(this, dragger)
+				},
+				over: function(event, ui){
 
-						list.remove();
+					var offset = $(this).offset();
 
-						//$( this ).after( ui.helper );
-
-						return;
-					}
-
-					var dropped = $( this ).find( this.widgetBaseClass + '-active' );
-					
-					if ( !dropped.length ) {
-
-						$(this).parents('li:first').after( ui.helper.parents('li:first') );
-					} else {
-
-						dropped.each(function( i ){
-
-							$( this ).removeClass( this.widgetBaseClass + '-active');
-
-							if ( i === dropped.length - 1 ) {
-						
-								$(this).after( ui.helper );
-							}
-						});
-					}
+					self.elements.dropBelow.css({ 
+						left: offset.left - 10, 
+						top: offset.top + $(this).height() });
 				}
 			});
+		},
 
+		_accept: function(helper, dragger){
+
+			$(helper).after(this.elements.dropBelow);
+
+			return this.options.parentChildDrop ? 1 : !dragger.parents('li:first').has( helper ).length;
+		},
+
+		_drop: function(helper, event, ui){
+
+			if ( ui.helper.parents('li:first').has( helper ).length ){
+
+				var list = $( helper ).parents('ul:first');
+
+				ui.helper.after( list.children() );
+
+				list.remove();
+
+				//$( this ).after( ui.helper );
+
+				return;
+			}
+
+			var dropped = $( helper ).find( this.widgetBaseClass + '-active' );
+			
+			if ( !dropped.length ) {
+
+				$(helper).parents('li:first').after( ui.helper.parents('li:first') );
+			} else {
+
+				dropped.each(function( i ){
+
+					$( this ).removeClass( this.widgetBaseClass + '-active');
+
+					if ( i === dropped.length - 1 ) {
+				
+						$(this).after( ui.helper );
+					}
+				});
+			}
 		},
 
 		_refresh : function(){
+
+			this.elements.dropBelow.css({ left: -99999 });
 
 			this.element.find( 'a' ).css({ 
 				'top': 'auto',
