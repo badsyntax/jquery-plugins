@@ -5,3 +5,6 @@
 .ui-listsortable-icon-dropbelow {
 	position: absolute;
 }
+
+.ui-effects-transfer { border: 2px solid black; }
+

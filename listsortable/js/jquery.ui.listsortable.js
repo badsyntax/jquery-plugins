@@ -17,8 +17,7 @@
 
 		options : {
 			helper: 'clone',
-			opacity: .5,
-			parentChildDrop: false
+			opacity: .5
 		},
 		
 		_create : function(){
@@ -27,8 +26,8 @@
 
 			this.elements = {
 				dropBelow: $('<span />')
-						.addClass( this.widgetBaseClass + '-icon-dropbelow ui-icon ui-icon-arrowthick-1-e ui-helper-hidden-accessible' )
-						.appendTo( 'body' )
+					.addClass( this.widgetBaseClass + '-icon-dropbelow ui-icon ui-icon-arrowthick-1-e ui-helper-hidden-accessible' )
+					.appendTo( 'body' )
 			};
 
 			this.element.find( 'a' )
@@ -58,54 +57,31 @@
 				},
 				over: function(event, ui){
 
-					var offset = $(this).offset();
+					var 
+					offset = $( this ).offset(), 
+					childlist = $( this ).parents('li:first').find('ul:first');
+					position = {
+						left: offset.left - 10,
+						top: offset.top + ( childlist.length ? childlist.outerHeight() + 10 : $( this ).height() )
+					} 
 
-					self.elements.dropBelow.css({ 
-						left: offset.left - 10, 
-						top: offset.top + $(this).height() });
+					self.elements.dropBelow.css( position );
 				}
 			});
 		},
 
-		_accept: function(helper, dragger){
+		_accept: function(target, dragger){
 
-			$(helper).after(this.elements.dropBelow);
-
-			return this.options.parentChildDrop ? 1 : !dragger.parents('li:first').has( helper ).length;
+			return !dragger.parents('li:first').has( target ).length;
 		},
 
-		_drop: function(helper, event, ui){
+		_drop: function(target, event, ui){
 
-			if ( ui.helper.parents('li:first').has( helper ).length ){
+			var dropped = ui.helper.parents('li:first');
 
-				var list = $( helper ).parents('ul:first');
-
-				ui.helper.after( list.children() );
-
-				list.remove();
-
-				//$( this ).after( ui.helper );
-
-				return;
-			}
-
-			var dropped = $( helper ).find( this.widgetBaseClass + '-active' );
+			$( target ).parents( 'li:first' ).after( dropped );
 			
-			if ( !dropped.length ) {
-
-				$(helper).parents('li:first').after( ui.helper.parents('li:first') );
-			} else {
-
-				dropped.each(function( i ){
-
-					$( this ).removeClass( this.widgetBaseClass + '-active');
-
-					if ( i === dropped.length - 1 ) {
-				
-						$(this).after( ui.helper );
-					}
-				});
-			}
+			dropped.effect('highlight', {}, 1000);
 		},
 
 		_refresh : function(){
