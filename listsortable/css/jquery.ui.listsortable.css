@@ -1,10 +1,4 @@
-.ui-listsortable-droppable-hover {
-
+.ui-listsortable-icon-dropitem > a {
+	text-decoration: none;
+	background: #FFFFAA;
 }
-
-.ui-listsortable-icon-dropbelow {
-	position: absolute;
-}
-
-.ui-effects-transfer { border: 2px solid black; }
-

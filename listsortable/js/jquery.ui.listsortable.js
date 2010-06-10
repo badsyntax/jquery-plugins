@@ -15,91 +15,56 @@
 
 	$.widget('ui.listsortable', {
 
-		options : {
-			helper: 'clone',
-			opacity: .5
-		},
-		
 		_create : function(){
 
 			var self = this;
 
-			this.elements = {
-				dropBelow: $('<span />')
-					.addClass( this.widgetBaseClass + '-icon-dropbelow ui-icon ui-icon-arrowthick-1-e ui-helper-hidden-accessible' )
-					.appendTo( 'body' )
-			};
-
 			this.element.find( 'a' )
 			.draggable({
 				containment: this.element,
-				opacity: this.options.opacity,
 				axis: 'x,y',
-				helper: 'clone',
+				helper: null,
 				zIndex: 9999,
-				drag: function(event, ui){
+				delay: 0,
+				distance: 0,
+				stop: function(event, ui) {
 
-				},
-				stop: function( event, ui ) {
-
-					self._refresh();
+					self.element.find( 'a' ).css({ 
+						'top': 'auto',
+						'left': 'auto'
+					});
 				}
 			})
 			.droppable({
-				hoverClass: this.widgetBaseClass + '-droppable-hover',
+				tolerance: 'touch',
 				drop: function(event, ui){
 
-					self._drop(this, event, ui);
+					ui.helper
+						.parents('li:first')
+						.removeClass( self.widgetBaseClass + '-icon-dropitem' )
+						.effect('highlight', {}, 1000);
 				},
 				accept: function(dragger){
 
-					return self._accept(this, dragger)
+					return !dragger.parents('li:first').has( this ).length;
 				},
 				over: function(event, ui){
 
-					var 
-					offset = $( this ).offset(), 
-					childlist = $( this ).parents('li:first').find('ul:first');
-					position = {
-						left: offset.left - 10,
-						top: offset.top + ( childlist.length ? childlist.outerHeight() + 10 : $( this ).height() )
-					} 
+					var dragger = ui.helper.parents('li:first').addClass( self.widgetBaseClass + '-icon-dropitem' ); 
 
-					self.elements.dropBelow.css( position );
+					$( this ).parents('li:first').before( dragger );
 				}
-			});
-		},
-
-		_accept: function(target, dragger){
-
-			return !dragger.parents('li:first').has( target ).length;
-		},
-
-		_drop: function(target, event, ui){
-
-			var dropped = ui.helper.parents('li:first');
-
-			$( target ).parents( 'li:first' ).after( dropped );
-			
-			dropped.effect('highlight', {}, 1000);
-		},
-
-		_refresh : function(){
-
-			this.elements.dropBelow.css({ left: -99999 });
-
-			this.element.find( 'a' ).css({ 
-				'top': 'auto',
-				left: 'auto'
 			});
 		},
 
 		destroy : function(){
 
-			this.element.find('a')
-				.removeClass(this.widgetBaseClass + '-active')
-				.draggable('destroy')
-				.droppable('destroy');
+			this.element
+				.find( 'li' )
+				.removeClass( this.widgetBaseClass + '-icon-dropitem' )
+					.find( 'a' )
+					.draggable( 'destroy' )
+					.droppable( 'destroy' );
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}

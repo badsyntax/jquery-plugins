@@ -56,6 +56,11 @@
 		<button id="destroy">
 			Destroy sortable
 		</button>
+
+		<h2>Notes</h2>
+		<ul>
+			<li>Requires anchor element within list item</li>
+		</ul>
 	</div>
 
 	<script type="text/javascript" src="/js/themeswitchertool.js"></script>
@@ -63,15 +68,15 @@
 
 	<script type="text/javascript">
 
-	$('#create').click(function(){
+		$('#create').click(function(){
 
-		$('.listsortable').listsortable();
+			$('.listsortable').listsortable();
 
 		}).trigger('click');
 
 		$('#destroy').click(function(){
 
-			$('.tree').listsortable('destroy');
+			$('.listsortable').listsortable('destroy');
 
 		});
 	
