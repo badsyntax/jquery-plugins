@@ -19,40 +19,40 @@
 
 			var self = this;
 
-			this.element.find( 'a' )
+			this.element.find( 'li' )
 			.draggable({
 				containment: this.element,
 				axis: 'x,y',
 				helper: null,
 				zIndex: 9999,
 				delay: 0,
-				distance: 0,
+				distance: 1,
+				start: function(event){
+
+					self._trigger('start');
+				},
 				stop: function(event, ui) {
 
-					self.element.find( 'a' ).css({ 
-						'top': 'auto',
-						'left': 'auto'
-					});
+					self.element
+						.find( 'li' )
+						.removeClass( self.widgetBaseClass + '-icon-dropitem');
 				}
 			})
 			.droppable({
-				tolerance: 'touch',
+				tolerance: 'intersect',
 				drop: function(event, ui){
 
 					ui.helper
-						.parents('li:first')
 						.removeClass( self.widgetBaseClass + '-icon-dropitem' )
-						.effect('highlight', {}, 1000);
-				},
-				accept: function(dragger){
+						.effect( 'highlight', {}, 1000 );
 
-					return !dragger.parents('li:first').has( this ).length;
+					self._trigger( 'drop' );
 				},
 				over: function(event, ui){
 
-					var dragger = ui.helper.parents('li:first').addClass( self.widgetBaseClass + '-icon-dropitem' ); 
+					var dragger = ui.helper.addClass( self.widgetBaseClass + '-icon-dropitem' ); 
 
-					$( this ).parents('li:first').before( dragger );
+					$( this ).before( dragger );
 				}
 			});
 		},
@@ -62,9 +62,8 @@
 			this.element
 				.find( 'li' )
 				.removeClass( this.widgetBaseClass + '-icon-dropitem' )
-					.find( 'a' )
-					.draggable( 'destroy' )
-					.droppable( 'destroy' );
+				.draggable( 'destroy' )
+				.droppable( 'destroy' );
 
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}

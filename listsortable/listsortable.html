@@ -28,21 +28,22 @@
 				<li>
 					<a href="#">Item 2</a>
 					<ul>
-						<li><a href="#">Item 1</a></li>
-						<li><a href="#">Item 2</a></li>
 						<li><a href="#">Item 3</a></li>
 						<li><a href="#">Item 4</a></li>
 						<li><a href="#">Item 5</a></li>
+						<li><a href="#">Item 6</a></li>
+						<li><a href="#">Item 7</a></li>
 						<li>
-							<a href="#">Item 2</a>
+							<a href="#">Item 8</a>
 							<ul>
-								<li><a href="#">Item 3</a></li>
-								<li><a href="#">Item 4</a></li>
-								<li><a href="#">Item 5</a></li>
+								<li><a href="#">Item 9</a></li>
+								<li><a href="#">Item 10</a></li>
+								<li><a href="#">Item 11</a></li>
 							</ul>
 						</li>
 					</ul>
 				</li>
+				<li><a href="#">12</a></li>
 			</ul>
 		</div>
 
@@ -57,9 +58,13 @@
 			Destroy sortable
 		</button>
 
+		<h2>Events</h2>
+		<div id="events"></div>
+
 		<h2>Notes</h2>
 		<ul>
-			<li>Requires anchor element within list item</li>
+			<li>Relies on anchor element in list item</li>
+			<li>Won't allow parent item to child list re-ordering</li>
 		</ul>
 	</div>
 
@@ -70,13 +75,19 @@
 
 		$('#create').click(function(){
 
-			$('.listsortable').listsortable();
+			$('.listsortable').listsortable({
+				drop: function(){
+					$('#events').append('dropped<br/>');
+				}
+			});
 
 		}).trigger('click');
 
 		$('#destroy').click(function(){
 
 			$('.listsortable').listsortable('destroy');
+
+			$('#events').empty();
 
 		});
 	
