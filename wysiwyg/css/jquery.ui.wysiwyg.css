@@ -1,10 +1,46 @@
+.ui-wysiwyg-editor {
+	border: 1px solid #aaa;
+	padding: 1em;
+	width: 300px;
+}
 
-.ui-ellipsis-container {
-	white-space: nowrap;
-	overflow: hidden;
+.ui-wysiwyg-toolbar {
+	width: 324px;
+	padding: 1px 0;
 }
-.ui-ellipsis {
+.ui-wysiwyg-toolbar li {
+	float: left;
+	cursor: pointer;
+	padding: 2px 0;
 }
-.ui-ellipsis-width {
-	display: inline !important
+.ui-wysiwyg-toolbar li .ui-icon {
+	margin: 0 2px;
+	background: url(../img/wysiwyg_toolbar_icons.png) no-repeat 0 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-bold {
+	background-position: 0 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-italic {
+	background-position: -16px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-underline {
+	background-position: -32px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-ul {
+	background-position: -48px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-ol {
+	background-position: -64px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-link {
+	background-position: -80px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-unlink {
+	background-position: -96px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-indent {
+	background-position: -112px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-outdent {
+	background-position: -128px 0;
 }
