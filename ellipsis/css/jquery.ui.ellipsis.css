@@ -1,10 +1,7 @@
-
 .ui-ellipsis-container {
 	white-space: nowrap;
 	overflow: hidden;
 }
-.ui-ellipsis {
-}
-.ui-ellipsis-width {
-	display: inline !important
+.ui-ellipsis-helper {
+	display: inline !important;
 }

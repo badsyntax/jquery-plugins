@@ -2,8 +2,8 @@
  * jQuery UI Ellipsis
  *
  * @Author Richard Willis
- *
- * @Depends:
+ * @Url http://github.com/badsyntax/jquery-plugins/tree/master/ellipsis/
+ * @Depends
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *
@@ -21,38 +21,39 @@
 				
 			this.element
 				.data('contents', this.element.contents() )
-				.addClass( 'ui-ellipsis' )
+				.addClass( this.widgetBaseClass )
 				.parent()
-					.addClass('ui-ellipsis-container');
+					.addClass( this.widgetBaseClass + '-container' );
 
 			var 
 				words = this.element.text().split(' '), 
 				tries = 0,
-				widthHelper = $('<span />')
-					.addClass( 'ui-ellipsis-helper' )
+				helper = $( '<span />' )
+					.addClass( this.widgetBaseClass + '-helper' )
 					.append( this.element.contents() )
 					.appendTo( this.element );
-			
 			do {
 
 				tries ++;
 
 				words.pop();
 
-				widthHelper.html( words.join(' ') + this.options.chars );
+				helper.html( words.join(' ') + this.options.chars );
 
-			} while ( ( widthHelper.width() > this.element.width() ) && ( tries < 60 ) );
+			} while ( ( helper.width() > this.element.width() ) && ( tries < 60 ) );
+
+			helper.parent().text( helper.text() ).end().remove();
 		},
 
 		destroy : function(){
+			
+			$.Widget.prototype.destroy.apply(this, arguments);
 
 			this.element
-				.removeClass( 'ui-ellipsis' )
-				.html( this.element.data('contents') )
+				.removeClass( this.widgetBaseClass )
+				.html( this.element.data( 'contents' ) )
 				.parent()
-					.removeClass( 'ui-ellipsis-container' );
-
-			$.Widget.prototype.destroy.apply(this, arguments);
+					.removeClass( this.widgetBaseClass + '-container' );
 		}
 	});
 
