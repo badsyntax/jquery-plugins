@@ -106,14 +106,23 @@
 			document.execCommand(name, false, null);
 		},
 
-		_edit : function(){
+		_edit : function( edit ){
 
-			this.element.attr( 'contentEditable', true ).focus();
+			edit = edit === undefined ? true : edit;
+
+			this.element.attr( 'contentEditable', edit ).focus();
 		},
 
 		destroy : function(){
 			
 			$.Widget.prototype.destroy.apply( this, arguments );
+
+			$.each( this.elements, function(){
+
+				this.remove();
+			});
+			
+			this._edit( false );
 		}
 	});
 
