@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8" />
+	<title>Table ellipsis</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.table-ellipsis.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.table-ellipsis.js"></script>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<style type="text/css">
+		th, td { 
+			text-align: left;
+		}
+	</style>
+</head>
+<body>
+
+	<div style="width: 600px">
+		<table border="0" width="100%" cellspacing="0" cellpadding="5">
+			<thead>
+				<tr>
+					<th>Statement</th>
+					<th width="100">Name</th>
+					<th width="100">Surname</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem lectus, tempor quis sagittis a, gravida et diam. Sed consectetur adipiscing venenatis.</td>
+					<td>John</td>
+					<td>Smith</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script type="text/javascript">
+		$('table').tableEllipsis();
+	</script>
+</body>
+</html>
