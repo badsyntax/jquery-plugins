@@ -19,21 +19,21 @@ $.fn.tableEllipsis = function(options){
 
 			var cell = $( this );
 
-			if ( !cell.data('ellipsis-html') ) {
+			if ( !cell.data( 'table-ellipsis-html' ) ) {
 
 				cell
-					.data('ellipsis-html', cell.html() )
-					.data('ellipsis-text', cell.text() )
-					.addClass( 'ellipsis-container' );
+					.data( 'table-ellipsis-html', cell.html() )
+					.data( 'table-ellipsis-text', cell.text() )
+					.addClass( 'table-ellipsis-container' );
 			}
 
 			cell.empty();
 
 			var
-				words = cell.data('ellipsis-text').split(' '),
+				words = cell.data( 'table-ellipsis-text' ).split(' '),
 				tries = 0,
 				helper = $( '<span />' )
-					.addClass( 'ellipsis-helper' )
+					.addClass( 'table-ellipsis-helper' )
 					.append( words.join(' ') )
 					.appendTo( cell );
 
@@ -50,10 +50,17 @@ $.fn.tableEllipsis = function(options){
 
 			helper.remove();
 
-			cell
-				.html( cell.data('ellipsis-html') )
-				.find(':last')
-				.html( text );
+			cell.html( cell.data( 'table-ellipsis-html' ) );
+
+			if ( cell.children().length ){
+				
+				
+				cell.find(':last').html( text );
+
+			} else {
+
+				cell.html( text );
+			}
 		});
 	});
 };

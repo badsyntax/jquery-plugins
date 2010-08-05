@@ -1,0 +1,7 @@
+.table-ellipsis-container {
+	white-space: nowrap;
+	overflow: hidden;
+}
+.table-ellipsis-helper {
+	display: inline !important;
+}
