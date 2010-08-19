@@ -1,7 +1,7 @@
 $.fn.uberEqualHeights = function(options){
 
 	options = $.extend({
-		classname: '.example',
+		selector: '.example',
 		callbacks: {}
 	}, options);
 
@@ -9,7 +9,7 @@ $.fn.uberEqualHeights = function(options){
 
 		var currentTallest = 0;
 
-		$( this ).find( options.classname ).each(function(){
+		$( this ).find( options.selector ).each(function(){
 
 			var self = $( this );
 
@@ -24,7 +24,7 @@ $.fn.uberEqualHeights = function(options){
 			}
 		});
 
-		$( this ).find( options.classname ).each(function(){
+		$( this ).find( options.selector ).each(function(){
 
 			var self = $( this );
 
