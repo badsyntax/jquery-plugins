@@ -8,41 +8,45 @@
 
 			return this.each(function(){
 
+				// try get the plugin reference from the base element
 				var obj = $.data( this, pluginName );
 
+				// the object needs to be initiated before executing public methods
 				if ( obj && obj[method] ) {
 
+					// execute a public method
 					obj[method].apply( obj, Array.prototype.slice.call( arg, 1 ) );
 
-				} else if ( !obj && typeof method === 'object' || ! method ) {
+				} 
+				// initiate the plugin, attach a reference
+				else if ( !obj && ( typeof method === 'object' || ! method ) ) {
 
-					var plugin = $.extend({}, base, pluginObj);
-						
-					$.data( this, pluginName, plugin );
-					
-					plugin._setup.call( plugin, this, method );
+					// extend the base plugin
+					$.extend(base.prototype, pluginObj);
+				
+					// create a new instance of the plugin	
+					new base(this, method, arg);
 
-					plugin._init.apply( plugin, Array.prototype.slice.call( arg, 1 ) );
+					// reset the base plugin
+					base.prototype = {};
 				}
 			});
 		};
 		
-		var base = {
+		function base(element, options, arg){
 
-			_pluginName: pluginName,
+			// pre-initialization setup of object attributes
+			this.element = $( element );
+			
+			this._pluginName = pluginName;
 
-			_setup: function(element, options){
+			$.extend(this.options, options);
+					
+			// add plugin reference to base element
+			$.data( element, pluginName, this );
 
-				this.element = $( element );
-
-				$.extend(this.options, options);
-			},
-
-			_init: function(){
-
-			},
-
-			 _trigger: function(scope, callback, arg){
+			// execute callback functions set in the options object
+			this.trigger = function(scope, callback, arg){
 
 				var type = typeof callback;
 
@@ -54,12 +58,16 @@
 
 					callback.apply( scope, arg );
 				}
-			},
+			};
 
-			_destroy: function(){
+			// remove plugin reference from base element	
+			this._destroy = function(){
 
 				$.removeData( this.element[0], this._pluginName );
-			}
+			};
+
+			// initiate the plugin. _init should be set in the plugin object
+			( this._init ) && this._init.apply( this, Array.prototype.slice.call( arg, 1 )); 
 		};
 	};
 
