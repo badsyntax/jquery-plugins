@@ -46,7 +46,7 @@
 			$.data( element, pluginName, this );
 
 			// execute callback functions set in the options object
-			this.trigger = function(scope, callback, arg){
+			this._trigger = function(scope, callback, arg){
 
 				var type = typeof callback;
 
