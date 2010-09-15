@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery Plugin Factory</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.factory.js"></script>
+	<script type="text/javascript">
+		
+		// an example plugin
+		$.plugin('myPlugin', {
+
+			// default options
+			options: {
+
+			},
+
+			// plugin initialization
+			_init: function(){
+				
+				( window.console) && console.log( 'plugin initiated' );
+
+				/* 
+				Public attributes and methods:
+					this.options;
+					this.element;
+					this._pluginName;
+					this._trigger();
+					this._destroy();
+				*/
+			},
+
+			// destroy plugin
+			destroy: function(){
+				
+				( window.console) && console.log( 'plugin destroyed' );
+
+				this._destroy();
+			}
+		});
+	</script>
+</head>
+<body>
+	<div>
+		<h2>Plugin factory</h2>
+
+		<div id="content" class="ui-helper-clearfix">
+
+		</div>
+
+
+		<button id="create">
+			Create
+		</button>
+		<button id="destroy">
+			Destroy
+		</button>
+
+	</div>
+
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+		
+			$('#content').myPlugin();
+
+			var eq = $.data( $('#content')[0], 'myPlugin' );
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+			
+			$('#content').myPlugin('destroy');
+		});
+
+	</script>
+</body>
+</html>
