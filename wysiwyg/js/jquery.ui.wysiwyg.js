@@ -18,6 +18,14 @@
 			this.elements = {};
 
 			this.element.addClass( this.widgetBaseClass + '-editor' );
+			
+			this.elements.container = 
+				$( '<div></div>' )
+					.addClass( this.widgetBaseClass );
+
+			this.elements.editor = this.element.hide().clone().show();
+
+			this.elements.container.append( this.elements.editor );
 
 			this._createToolbar();
 
@@ -68,17 +76,28 @@
 					'Outdent': function(){
 						
 						self._exec('outdent');
+					},
+					'Source': function(){
+						
+						self._exec('source');
 					}
 				}
 			});
 
-			this.elements.toolbar = 
-				$('<ul></ul>').addClass( this.widgetBaseClass + '-toolbar ui-helper-reset ui-helper-clearfix');
+			this.elements.toolbar =
+				$( '<div></div>' )
+					.addClass( this.widgetBaseClass + '-toolbar ui-helper-clearfix' )
+					.prependTo( this.elements.container );
+
+			this.elements.toolbarButtons = 
+				$('<ul></ul>')
+					.addClass( 'ui-helper-reset ui-helper-clearfix')
+					.appendTo( this.elements.toolbar );
 
 			$.each( this.options.toolbar.buttons, function( index, val ){
 
 				$('<li></li>')
-				.addClass( 'ui-state-default ui-corner-all' )
+				.addClass( 'ui-corner-all' )
 				.attr( 'title', index )
 				.click(function(){
 
@@ -88,10 +107,10 @@
 
 				})
 				.append( '<span class="ui-icon ui-icon-toolbar-' + index.toLowerCase() + '"></span>' )
-				.appendTo( self.elements.toolbar );
+				.appendTo( self.elements.toolbarButtons );
 			});
 			
-			this.element.before( this.elements.toolbar );
+			this.element.before( this.elements.container );
 
 			this.elements.toolbar.find('li')
 			.bind('mouseenter mouseleave', function(){
@@ -110,7 +129,7 @@
 
 			edit = edit === undefined ? true : edit;
 
-			this.element.attr( 'contentEditable', edit ).focus();
+			this.elements.editor.attr( 'contentEditable', edit ).focus();
 		},
 
 		destroy : function(){

@@ -1,17 +1,25 @@
+.ui-wysiwyg {
+	width: 500px;
+}
 .ui-wysiwyg-editor {
 	border: 1px solid #aaa;
 	padding: 1em;
-	width: 300px;
 }
-
 .ui-wysiwyg-toolbar {
-	width: 324px;
 	padding: 1px 0;
+	background: #fff;
+	border: 1px solid #aaa;
+	border-width: 1px 1px 0 1px;
+	padding-left: 2px;
 }
 .ui-wysiwyg-toolbar li {
 	float: left;
 	cursor: pointer;
 	padding: 2px 0;
+	border: 1px solid #fff;
+}
+.ui-wysiwyg-toolbar li.ui-state-hover {
+	border-color: #aaa;
 }
 .ui-wysiwyg-toolbar li .ui-icon {
 	margin: 0 2px;
@@ -43,4 +51,7 @@
 }
 .ui-wysiwyg-toolbar li .ui-icon-toolbar-outdent {
 	background-position: -128px 0;
+}
+.ui-wysiwyg-toolbar li .ui-icon-toolbar-source {
+	background-position: -144px 0;
 }
