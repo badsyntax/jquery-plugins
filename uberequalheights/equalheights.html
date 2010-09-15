@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery Uber Equal Heights plugin</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.uberequalheights.js"></script>
+	<style type="text/css">
+		#content {
+			margin-bottom: 2em;
+		}
+
+		.box {
+			float: left;
+			width: 200px;
+			border: 1px solid #aaa;
+			margin-right: 10px;
+			padding: .5em;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<h2>Uber equal heights</h2>
+
+		<div id="content" class="ui-helper-clearfix">
+
+			<div class="box">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed libero quis sem facilisis ullamcorper. Nullam iaculis mattis urna, id consequat erat viverra sed. Etiam viverra lacinia dolor ac faucibus. 
+			</div>
+			<div class="box">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed libero quis sem facilisis ullamcorper. Nullam iaculis mattis urna, id consequat erat viverra sed. Etiam viverra lacinia dolor ac faucibus. Quisque elementum urna quis augue luctus dignissim. Praesent massa lorem, vehicula quis dignissim a, tristique a erat. Sed congue nisl ac ligula lobortis venenatis. Donec dapibus dapibus lectus eu ultricies. Donec dui elit, sodales quis sagittis a, lobortis ac ante. Aliquam pellentesque ultrices libero vehicula fringilla. Integer faucibus mi nec arcu tincidunt placerat. 
+			</div>
+			<div class="box">
+				Praesent massa lorem, vehicula quis dignissim a, tristique a erat. Sed congue nisl ac ligula lobortis venenatis. Donec dapibus dapibus lectus eu ultricies. Donec dui elit, sodales quis sagittis a, lobortis ac ante. Aliquam pellentesque ultrices libero vehicula fringilla. Integer faucibus mi nec arcu tincidunt placerat. 
+			</div>
+
+		</div>
+
+
+		<button id="create">
+			Create
+		</button>
+		<button id="destroy">
+			Destroy
+		</button>
+
+		<script type="text/javascript" src="/js/themeswitchertool.js"></script>
+		<div id="theme-switcher"></div>
+	</div>
+
+	
+	<script type="text/javascript">
+
+		$('#create').click(function(){
+		
+			$('#content').equalHeights({
+				selector: '.box'
+			});
+
+		}).trigger('click');
+
+		$('#destroy').click(function(){
+			
+			$('#content').equalHeights('destroy');
+		});
+
+	</script>
+</body>
+</html>
