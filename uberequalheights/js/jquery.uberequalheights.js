@@ -1,52 +1,95 @@
-$.fn.uberEqualHeights = function(options){
+(function( $, undefined ){
 
-	options = $.extend({
-		selector: '.example',
-		callbacks: {}
-	}, options);
+	// uber equal eights plugon will adjust  set of elements to the maximum height of 
 
-	return this.each(function(){
+	$.fn.equalHeights = function(method){
 
-		var currentTallest = 0;
+		var arg = arguments, pluginName = 'equalHeights';
 
-		$( this ).find( options.selector ).each(function(){
+		return this.each(function(){
 
-			var self = $( this );
+			var plugin = $.data( this, pluginName );
 
-			self.css({
-				minHeight: 0,
-				height: 'auto'
+			if ( plugin && plugin[method] ) {
+
+				plugin[method].apply( plugin, Array.prototype.slice.call( arg, 1 ) );
+
+			} else if ( !plugin && typeof method === 'object' || ! method ) {
+
+				$.data( this, pluginName, new equalHeights( this, method, pluginName ) );
+			}
+		});
+	};
+
+	function equalHeights(element, options, pluginName){
+
+		this._pluginName = pluginName;
+
+		this.options = $.extend({
+			selector: '.example-column',
+			callbacks: {}
+		}, options);
+
+		this.options.reset = {
+			minHeight: 0,
+			height: 'auto'
+		};
+
+		this.element = $( element );
+	
+		this.elements = this.element.find( this.options.selector );
+
+		this.adjust();
+	};
+
+	equalHeights.prototype = {
+	
+		adjust: function(){
+
+			var tallest = 0, options = this.options;
+
+			this.elements.each(function(){
+
+				var element = $( this );
+
+				element.css( options.reset );
+
+				if ( element.outerHeight() > tallest ) {
+
+					tallest = element.outerHeight();
+				}
 			});
 
-			if ( self.outerHeight() > currentTallest ) {
+			this.elements.each(function(){
 
-				currentTallest = self.outerHeight();
-			}
-		});
+				var element = $( this );
 
-		$( this ).find( options.selector ).each(function(){
+				if ( options.callbacks[ this.id ]) {
 
-			var self = $( this );
+					options.callbacks[ this.id ].call( this, tallest );
 
-			if ( options.callbacks[ this.id ]) {
+				} else {
 
-				options.callbacks[ this.id ].call( this, currentTallest );
-
-			} else {
-
-				// for ie6, set the height since min-height isn't supported
-				// TODO: check min height support instead of browser detection
-				if ($.browser.msie && $.browser.version == 6.0) {
-
-					self.css({
-						height: currentTallest
+					element.css({
+						minHeight: tallest,
+						height: element[0].style.minHeight !== undefined ? 'auto' : tallest
 					});
 				}
+			});
+		},
 
-				self.css({
-					minHeight: currentTallest
-				});
-			}
-		});
-	});
-};
+		destroy: function(){
+		
+			var self = this;
+
+			this.elements.each(function(){
+
+				$( this ).css( self.options.reset );
+			});
+
+			$.removeData( this.element[0], this._pluginName );
+		}
+		
+	};
+
+})( window.jQuery );
