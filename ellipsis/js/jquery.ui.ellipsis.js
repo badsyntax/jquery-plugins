@@ -21,9 +21,7 @@
 				
 			this.element
 				.data('contents', this.element.contents() )
-				.addClass( this.widgetBaseClass )
-				.parent()
-					.addClass( this.widgetBaseClass + '-container' );
+				.addClass( this.widgetBaseClass );
 
 			var 
 				words = this.element.text().split(' '), 
