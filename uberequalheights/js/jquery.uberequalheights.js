@@ -27,6 +27,7 @@
 
 		this.options = $.extend({
 			selector: '.example-column',
+			height: 'outerHeight',		// height; innerHeight or outerHeight
 			callbacks: {}
 		}, options);
 
@@ -54,9 +55,9 @@
 
 				element.css( options.reset );
 
-				if ( element.outerHeight() > tallest ) {
+				if ( element[ options.height ]() > tallest ) {
 
-					tallest = element.outerHeight();
+					tallest = element[ options.height ]();
 				}
 			});
 
