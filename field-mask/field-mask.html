@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8" />
+	<title>Table ellipsis</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.fieldmask.js"></script>
+</head>
+<body>
+
+	<form method="get" action="?">
+		<fieldset>
+			<input type="text" name="username" title="Username" />
+			<input type="password" name="password" title="Password" />
+			<input type="submit" value="Submit" />
+		</fieldset>
+	</form>
+
+	<script type="text/javascript">
+		$('input[title]').fieldmask();
+	</script>
+</body>
+</html>
