@@ -5,7 +5,7 @@
 			resetOnSubmit: true
 		}, config);
 
-		var helper = $('<div />').attr({id: 'fieldmask-helper'});
+		var helper = $('<div />');
 
 		function type(ftype){
 			var field = $(this).after(helper).remove().attr('type', ftype).data('password', (ftype === 'text'));
@@ -35,9 +35,7 @@
 		if (config.resetOnSubmit) {
 			this.each(function(){
 				var field = $(this);
-				field
-				.parents('form')
-				.submit(function(){
+				field parents('form').submit(function(){
 					field[0].value = field[0].value === field[0].title ? '' : field[0].value;
 				});
 			});
