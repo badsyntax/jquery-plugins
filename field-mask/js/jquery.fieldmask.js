@@ -7,6 +7,7 @@
 
 		var helper = $('<div />');
 
+		/* NOTE: this does not work in IE!!! :( */
 		function changeType(type){
 			/*
 			1- Add a helper div after the field
